@@ -21,12 +21,34 @@ repositories {
     mavenCentral()
 }
 
+tasks.register("bootRunDev") {
+    group = "application"
+    description = "Runs the Spring Boot application with the dev profile"
+    doFirst {
+        tasks.bootRun.configure {
+            systemProperty("spring.profiles.active", "dev")
+        }
+    }
+    finalizedBy("bootRun")
+}
 
+tasks.register("bootRunProd") {
+    group = "application"
+    description = "Runs the Spring Boot application with the prod profile"
+    doFirst {
+        tasks.bootRun.configure {
+            systemProperty("spring.profiles.active", "prod")
+        }
+    }
+    finalizedBy("bootRun")
+}
 
 dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
     implementation("org.springframework.boot:spring-boot-starter-actuator:3.3.0")
     implementation("org.springframework.boot:spring-boot-starter-web:3.2.6")
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+    implementation("org.mongodb:mongodb-driver-sync:5.1.0")
     compileOnly("org.projectlombok:lombok:1.18.32")
     developmentOnly("org.springframework.boot:spring-boot-devtools:3.3.0")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:3.2.6")
