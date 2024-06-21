@@ -3,7 +3,7 @@ name: CI/CD Pipeline - Development
 on:
   push:
     branches:
-      - '**' # TODO: poner "dev" una vez testeado
+      - dev
 
 jobs:
   build-and-deploy:
