@@ -39,5 +39,5 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker build -t agusgabrielli/buddy:dev .
+          docker build -t agusgabrielli/buddy:dev --build-arg JAR_FILE=build/libs/*.jar .
           docker push agusgabrielli/buddy:dev
