@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
       args:
         JAR_FILE: build/libs/*.jar
-      #  PORT: ${PORT} # Used in Dockerfile at build time. Read from .env
+        PORT: ${PORT} # Used in Dockerfile at build time. Read from .env
     ports:
       - '${PORT}:${PORT}'
     environment: # Used during container runtime. Read from .env
