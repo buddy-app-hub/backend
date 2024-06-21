@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        JAR_FILE: build/libs/*.jar
+      #  PORT: ${PORT} # Used in Dockerfile at build time. Read from .env
+    ports:
+      - '${PORT}:${PORT}'
+    environment: # Used during container runtime. Read from .env
+      - PORT=${PORT}
+      - DATABASE_URL=mongodb://mongodb:${DB_PORT}/${DB_NAME}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - ./src/main/resources:/app/config
+    networks:
+      - buddy-network
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - '${DB_PORT}:${DB_PORT}'
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${DB_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${DB_PASSWORD}
+      - MONGO_INITDB_DATABASE=${DB_NAME}
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - buddy-network
+
+networks:
+  buddy-network:
+    driver: bridge
+
+volumes:
+  mongo-data:
