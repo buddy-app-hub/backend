@@ -11,6 +11,7 @@ services:
     ports:
       - '${PORT}:${PORT}'
     environment: # Used during container runtime. Read from .env
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
       - PORT=${PORT}
       - DATABASE_URL=mongodb://mongodb:${DB_PORT}/${DB_NAME}
       - DB_USERNAME=${DB_USERNAME}
