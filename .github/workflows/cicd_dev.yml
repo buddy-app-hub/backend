@@ -2,8 +2,8 @@ name: CI/CD Pipeline - Development
 
 on:
   push:
-    branches:
-      - dev
+    branches-ignore:
+      - 'main'
 
 jobs:
   build-and-deploy:
