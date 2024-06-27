@@ -46,12 +46,11 @@ tasks.register("bootRunProd") {
 dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
     implementation("org.springframework.boot:spring-boot-starter-actuator:3.3.0")
+    implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-web:3.2.6")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
     implementation("org.mongodb:mongodb-driver-sync:5.1.0")
     implementation("com.google.firebase:firebase-admin:9.3.0")
-    implementation("org.springframework.boot:spring-boot-starter-security")
-    implementation("org.springframework.boot:spring-boot-starter-web")
     compileOnly("org.projectlombok:lombok:1.18.32")
     developmentOnly("org.springframework.boot:spring-boot-devtools:3.3.0")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:3.2.6")
