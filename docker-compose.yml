@@ -8,6 +8,7 @@ services:
       args:
         JAR_FILE: build/libs/*.jar
         PORT: ${PORT} # Used in Dockerfile at build time. Read from .env
+        FIREBASE_KEY: ${FIREBASE_KEY}
     ports:
       - '${PORT}:${PORT}'
     environment: # Used during container runtime. Read from .env

@@ -7,24 +7,24 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.io.FileInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Base64;
 
 @Configuration
 public class FirebaseConfig {
 
 
-    @Value("${firebase.service-account.path}")
+    @Value("${FIREBASE_KEY}")
     private String firebaseKeyPath;
 
     @Bean
     public FirebaseApp initializeFirebase() {
         try {
-            FileInputStream serviceAccount =
-                    new FileInputStream(firebaseKeyPath);
+            byte[] decodedKey = Base64.getDecoder().decode(firebaseKeyPath);
 
             FirebaseOptions options = FirebaseOptions.builder()
-                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                    .setCredentials(GoogleCredentials.fromStream(new ByteArrayInputStream(decodedKey)))
                     .build();
 
             return FirebaseApp.initializeApp(options);

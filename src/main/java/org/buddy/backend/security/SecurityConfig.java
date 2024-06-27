@@ -17,8 +17,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated()
-                )
-                .addFilterBefore(new FirebaseFilter(), UsernamePasswordAuthenticationFilter.class);
+                );
+                //.addFilterBefore(new FirebaseFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
