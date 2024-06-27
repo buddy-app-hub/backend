@@ -15,7 +15,7 @@ import java.util.Base64;
 public class FirebaseConfig {
 
 
-    @Value("${FIREBASE_KEY}")
+    @Value("#{environment.FIREBASE_KEY}")
     private String firebaseKeyPath;
 
     @Bean
