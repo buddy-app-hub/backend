@@ -16,6 +16,7 @@ services:
       - DATABASE_URL=mongodb://mongodb:${DB_PORT}/${DB_NAME}
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
+      - FIREBASE_ACCOUNT_PATH=${FIREBASE_ACCOUNT_PATH}
     volumes:
       - ./src/main/resources:/app/config
     networks:

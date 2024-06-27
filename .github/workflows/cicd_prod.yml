@@ -25,6 +25,10 @@ jobs:
         with:
           gradle-version: '7.4.2'
 
+      - name: Create firebaseKey.json
+        run: |
+          echo "${{ secrets.FIREBASE_KEY }}" > src/main/resources/firebaseKey.json
+
       - name: Make gradlew executable
         run: chmod +x gradlew
 

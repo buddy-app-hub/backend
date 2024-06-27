@@ -20,6 +20,10 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      - name: Create firebaseKey.json
+        run: |
+          echo "${{ secrets.FIREBASE_KEY }}" > src/main/resources/firebaseKey.json
+
       - name: Set up Gradle 7.4.2
         uses: gradle/gradle-build-action@v2
         with:
