@@ -13,9 +13,7 @@ services:
     environment: # Used during container runtime. Read from .env
       - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
       - PORT=${PORT}
-      - DATABASE_URL=mongodb://mongodb:${DB_PORT}/${DB_NAME}
-      - DB_USERNAME=${DB_USERNAME}
-      - DB_PASSWORD=${DB_PASSWORD}
+      - DATABASE_URI=mongodb://${DB_USERNAME}:${DB_PASSWORD}@mongodb:${DB_PORT}/admin?retryWrites=true&w=majority
     volumes:
       - ./src/main/resources:/app/config
     networks:
@@ -30,7 +28,7 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${DB_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${DB_PASSWORD}
-      - MONGO_INITDB_DATABASE=${DB_NAME}
+      - MONGO_INITDB_DATABASE=admin # Tiene que ser admin porque es donde crea el usuario que especificamos con las variables de arriba
     volumes:
       - mongo-data:/data/db
     networks:
