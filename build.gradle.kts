@@ -24,13 +24,22 @@ repositories {
 tasks.register("bootRunDev") {
     group = "application"
     description = "Runs the Spring Boot application with the dev profile"
+
     doFirst {
-        tasks.bootRun.configure {
+        val env = System.getenv()
+        val databaseUri = env.getOrDefault("DATABASE_URI", "no-database-specified")
+        val port = env.getOrDefault("PORT", "8080")
+
+        tasks.withType<org.springframework.boot.gradle.tasks.run.BootRun>().configureEach {
             systemProperty("spring.profiles.active", "dev")
+            environment("DATABASE_URI", databaseUri)
+            environment("PORT", port)
         }
     }
+
     finalizedBy("bootRun")
 }
+
 
 tasks.register("bootRunProd") {
     group = "application"
