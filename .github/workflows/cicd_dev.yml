@@ -39,5 +39,5 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker build -t agusgabrielli/buddy:dev --build-arg JAR_FILE=build/libs/*.jar --build-arg PORT=${{ vars.PORT }} .
+          docker build -t agusgabrielli/buddy:dev --build-arg JAR_FILE=build/libs/*.jar --build-arg PORT=${{ vars.PORT }}  --build-arg FIREBASE_KEY=${{ secrets.FIREBASE_KEY }} .
           docker push agusgabrielli/buddy:dev

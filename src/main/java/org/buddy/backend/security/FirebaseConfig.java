@@ -16,12 +16,12 @@ public class FirebaseConfig {
 
 
     @Value("#{environment.FIREBASE_KEY}")
-    private String firebaseKeyPath;
+    private String firebaseKey;
 
     @Bean
     public FirebaseApp initializeFirebase() {
         try {
-            byte[] decodedKey = Base64.getDecoder().decode(firebaseKeyPath);
+            byte[] decodedKey = Base64.getDecoder().decode(firebaseKey);
 
             FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(new ByteArrayInputStream(decodedKey)))
