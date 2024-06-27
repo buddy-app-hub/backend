@@ -14,10 +14,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests()
-                .requestMatchers("/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
+                .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers("/**").permitAll()
+                        .anyRequest().authenticated()
+                )
                 .addFilterBefore(new FirebaseFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
