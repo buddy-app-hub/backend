@@ -18,14 +18,19 @@ public class FirebaseConfig {
     private String firebaseKeyPath;
 
     @Bean
-    public FirebaseApp initializeFirebase() throws IOException {
-        FileInputStream serviceAccount =
-                new FileInputStream(firebaseKeyPath);
+    public FirebaseApp initializeFirebase() {
+        try {
+            FileInputStream serviceAccount =
+                    new FileInputStream(firebaseKeyPath);
 
-        FirebaseOptions options = FirebaseOptions.builder()
-                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                .build();
+            FirebaseOptions options = FirebaseOptions.builder()
+                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                    .build();
 
-        return FirebaseApp.initializeApp(options);
+            return FirebaseApp.initializeApp(options);
+        } catch (IOException e) {
+            System.err.println("Failed to initialize Firebase due to an IO exception" + e.getMessage());
+            return FirebaseApp.initializeApp();
+        }
     }
 }
