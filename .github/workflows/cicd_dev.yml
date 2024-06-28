@@ -32,7 +32,6 @@ jobs:
         env:
           FIREBASE_KEY: ${{ secrets.FIREBASE_KEY }}
         run:
-          echo "firebaseKey=$FIREBASE_KEY" > gradle.properties
           ./gradlew build
 
       - name: Log in to Docker Hub
