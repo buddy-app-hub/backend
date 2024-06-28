@@ -29,6 +29,8 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle Wrapper
+        env:
+          FIREBASE_KEY: ${{ secrets.FIREBASE_KEY }}
         run: ./gradlew build
 
       - name: Log in to Docker Hub
