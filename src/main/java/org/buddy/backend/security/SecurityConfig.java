@@ -6,10 +6,15 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.core.env.Environment;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    @Autowired
+    private Environment env;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -18,8 +23,20 @@ public class SecurityConfig {
                         .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated()
                 );
-                //.addFilterBefore(new FirebaseFilter(), UsernamePasswordAuthenticationFilter.class);
+
+        if (!isTestEnvironment()) {
+            http.addFilterBefore(new FirebaseFilter(), UsernamePasswordAuthenticationFilter.class);
+        }
 
         return http.build();
+    }
+
+    private boolean isTestEnvironment() {
+        for (String profile : env.getActiveProfiles()) {
+            if ("test".equals(profile)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
