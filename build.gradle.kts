@@ -24,13 +24,22 @@ repositories {
 tasks.register("bootRunDev") {
     group = "application"
     description = "Runs the Spring Boot application with the dev profile"
+
     doFirst {
-        tasks.bootRun.configure {
+        val env = System.getenv()
+        val databaseUri = env.getOrDefault("DATABASE_URI", "no-database-specified")
+        val port = env.getOrDefault("PORT", "8080")
+
+        tasks.withType<org.springframework.boot.gradle.tasks.run.BootRun>().configureEach {
             systemProperty("spring.profiles.active", "dev")
+            environment("DATABASE_URI", databaseUri)
+            environment("PORT", port)
         }
     }
+
     finalizedBy("bootRun")
 }
+
 
 tasks.register("bootRunProd") {
     group = "application"
@@ -46,9 +55,11 @@ tasks.register("bootRunProd") {
 dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
     implementation("org.springframework.boot:spring-boot-starter-actuator:3.3.0")
+    implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-web:3.2.6")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
     implementation("org.mongodb:mongodb-driver-sync:5.1.0")
+    implementation("com.google.firebase:firebase-admin:9.3.0")
     compileOnly("org.projectlombok:lombok:1.18.32")
     developmentOnly("org.springframework.boot:spring-boot-devtools:3.3.0")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:3.2.6")
