@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.core.env.Environment;
@@ -19,10 +20,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/**").permitAll()
-                        .anyRequest().authenticated()
-                );
+        .authorizeHttpRequests((requests) -> requests
+            .requestMatchers("/**").permitAll()
+            .anyRequest().authenticated()
+        );
+
+        // TODO: sacar para produccion
+        http.csrf(AbstractHttpConfigurer::disable);
 
         if (!isTestEnvironment()) {
             http.addFilterBefore(new FirebaseFilter(), UsernamePasswordAuthenticationFilter.class);
@@ -33,7 +37,8 @@ public class SecurityConfig {
 
     private boolean isTestEnvironment() {
         for (String profile : env.getActiveProfiles()) {
-            if ("test".equals(profile)) {
+            // TODO: sacar dev 
+            if ("dev".equals(profile) || "test".equals(profile)) {
                 return true;
             }
         }
