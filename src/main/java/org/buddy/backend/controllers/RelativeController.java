@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.buddy.backend.models.Relative;
@@ -20,6 +21,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("relatives")
+@SecurityRequirement(name = "bearer-key")
+// Para usarlo a nivel metodo: @Operation(security = { @SecurityRequirement(name = "bearer-key") })
 public class RelativeController {
     @Autowired
     private RelativeService relativeService;

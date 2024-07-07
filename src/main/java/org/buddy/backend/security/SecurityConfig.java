@@ -37,8 +37,7 @@ public class SecurityConfig {
 
     private boolean isTestEnvironment() {
         for (String profile : env.getActiveProfiles()) {
-            // TODO: sacar dev 
-            if ("dev".equals(profile) || "test".equals(profile)) {
+            if ("test".equals(profile)) {
                 return true;
             }
         }

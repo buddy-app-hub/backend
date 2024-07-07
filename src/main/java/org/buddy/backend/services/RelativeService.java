@@ -38,4 +38,8 @@ public class RelativeService {
     public void deleteRelative(String id) {
         relativeRepository.deleteById(id);
     }
+
+    public Relative findByFirebaseUID(String firebaseUID) {
+        return relativeRepository.findRelativeByFirebaseUID(firebaseUID);
+    }
 }

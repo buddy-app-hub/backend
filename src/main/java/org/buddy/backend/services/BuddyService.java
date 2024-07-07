@@ -38,4 +38,8 @@ public class BuddyService {
     public void deleteBuddy(String id) {
         buddyRepository.deleteById(id);
     }
+
+    public Buddy findByFirebaseUID(String firebaseUID) {
+        return buddyRepository.findBuddyByFirebaseUID(firebaseUID);
+    }
 }

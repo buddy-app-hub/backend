@@ -38,4 +38,8 @@ public class ElderService {
     public void deleteElder(String id) {
         elderRepository.deleteById(id);
     }
+
+    public Elder findByFirebaseUID(String firebaseUID) {
+        return elderRepository.findElderByFirebaseUID(firebaseUID);
+    }
 }

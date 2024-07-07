@@ -6,4 +6,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface RelativeRepository extends MongoRepository<Relative, String> {
     Relative findRelativeByFirstName(String firstName);
+
+    Relative findRelativeByFirebaseUID(String firebaseUID);
 }
