@@ -3,7 +3,7 @@ package org.buddy.backend.models;
 import java.util.List;
 
 public class BuddyProfile {
-    private boolean isOnPause;
+    private boolean isOnPause = false;
     private String description;
     private StudentDetails studentDetails;
     private WorkerDetails workerDetails;

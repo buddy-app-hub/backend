@@ -5,10 +5,10 @@ import java.util.Date;
 public class Meeting {
     private TimeOfDay date;
     private MeetingLocation location;
-    private boolean isCancelled;
-    private boolean isConfirmedByBuddy;
-    private boolean isConfirmedByElder;
-    private boolean isRescheduled;
+    private boolean isCancelled = false;
+    private boolean isConfirmedByBuddy = false;
+    private boolean isConfirmedByElder = false;
+    private boolean isRescheduled = false;
     private String activity;
     private Date dateLastModification;
 

@@ -1,7 +1,7 @@
 package org.buddy.backend.models;
 
 public class MeetingLocation {
-    private boolean isEldersHome;
+    private boolean isEldersHome = false;
     private String placeName;
     private String streetName;
     private String streetNumber;

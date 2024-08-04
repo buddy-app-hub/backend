@@ -9,12 +9,12 @@ import java.util.Date;
 public class Buddy {
     @Id
     private String firebaseUID;
-    private boolean isBlocked;
-    private boolean isApprovedBuddy;
-    private boolean isApplicationToBeBuddyUnderReview;
+    private boolean isBlocked = false;
+    private boolean isApprovedBuddy = false;
+    private boolean isApplicationToBeBuddyUnderReview = false;
     private String registrationMethod;
     private Date registrationDate;
-    private boolean isIdentityValidated;
+    private boolean isIdentityValidated = false;
     private String firstName;
     private String lastName;
     private Integer age;

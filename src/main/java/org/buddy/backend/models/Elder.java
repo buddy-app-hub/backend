@@ -9,7 +9,7 @@ import java.util.Date;
 public class Elder {
     @Id
     private String firebaseUID;
-    private boolean isBlocked;
+    private boolean isBlocked = false;
     private String registrationMethod;
     private Date registrationDate;
     private boolean lovedOneMode;
