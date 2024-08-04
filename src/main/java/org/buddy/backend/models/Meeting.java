@@ -54,11 +54,11 @@ public class Meeting {
         this.isConfirmedByElder = isConfirmedByElder;
     }
 
-    public boolean isHasBeenRescheduled() {
+    public boolean isRescheduled() {
         return isRescheduled;
     }
 
-    public void setHasBeenRescheduled(boolean isRescheduled) {
+    public void setRescheduled(boolean isRescheduled) {
         this.isRescheduled = isRescheduled;
     }
 
@@ -74,7 +74,7 @@ public class Meeting {
         return dateLastModification;
     }
 
-    public void setActivity(Date dateLastModification) {
+    public void setDateLastModification(Date dateLastModification) {
         this.dateLastModification = dateLastModification;
     }
 

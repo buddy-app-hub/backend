@@ -15,7 +15,7 @@ public class ElderService {
         return elderRepository.findElderByFirstName(firstName);
     }
 
-    public List<Elder> getAllBuddies() {
+    public List<Elder> getAllElders() {
         return elderRepository.findAll();
     }
 
