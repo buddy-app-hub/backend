@@ -27,6 +27,12 @@ public class Elder {
     private Address address;
     private ElderProfile elderProfile;
 
+    private final String userType = "elder";
+
+    public String getUserType() {
+        return userType;
+    }
+
     // Getters and setters
 
     public String getFirebaseUID() {

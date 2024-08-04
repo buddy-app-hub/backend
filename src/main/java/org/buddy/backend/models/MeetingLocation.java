@@ -4,7 +4,7 @@ public class MeetingLocation {
     private boolean isEldersHome = false;
     private String placeName;
     private String streetName;
-    private String streetNumber;
+    private Integer streetNumber;
     private String city;
     private String state;
     private String country;
@@ -35,11 +35,11 @@ public class MeetingLocation {
         this.streetName = streetName;
     }
 
-    public String getStreetNumber() {
+    public Integer getStreetNumber() {
         return streetNumber;
     }
 
-    public void setStreetNumber(String streetNumber) {
+    public void setStreetNumber(Integer streetNumber) {
         this.streetNumber = streetNumber;
     }
 

@@ -29,6 +29,12 @@ public class Buddy {
     private Address address;
     private BuddyProfile buddyProfile;
 
+    private final String userType = "buddy";
+
+    public String getUserType() {
+        return userType;
+    }
+
     public String getFirebaseUID() {
         return firebaseUID;
     }
