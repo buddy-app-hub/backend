@@ -30,35 +30,35 @@ public class Meeting {
         this.location = location;
     }
 
-    public boolean isCancelled() {
+    public boolean getIsCancelled() {
         return isCancelled;
     }
 
-    public void setCancelled(boolean isCancelled) {
+    public void setIsCancelled(boolean isCancelled) {
         this.isCancelled = isCancelled;
     }
 
-    public boolean isConfirmedByBuddy() {
+    public boolean getIsConfirmedByBuddy() {
         return isConfirmedByBuddy;
     }
 
-    public void setConfirmedByBuddy(boolean isConfirmedByBuddy) {
+    public void setIsConfirmedByBuddy(boolean isConfirmedByBuddy) {
         this.isConfirmedByBuddy = isConfirmedByBuddy;
     }
 
-    public boolean isConfirmedByElder() {
+    public boolean getIsConfirmedByElder() {
         return isConfirmedByElder;
     }
 
-    public void setConfirmedByElder(boolean isConfirmedByElder) {
+    public void setIsConfirmedByElder(boolean isConfirmedByElder) {
         this.isConfirmedByElder = isConfirmedByElder;
     }
 
-    public boolean isRescheduled() {
+    public boolean getIsRescheduled() {
         return isRescheduled;
     }
 
-    public void setRescheduled(boolean isRescheduled) {
+    public void setIsRescheduled(boolean isRescheduled) {
         this.isRescheduled = isRescheduled;
     }
 

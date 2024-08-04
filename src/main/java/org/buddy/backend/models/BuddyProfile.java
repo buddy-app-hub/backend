@@ -12,11 +12,11 @@ public class BuddyProfile {
 
     // Getters and setters
 
-    public boolean isOnPause() {
+    public boolean getIsOnPause() {
         return isOnPause;
     }
 
-    public void setOnPause(boolean isOnPause) {
+    public void setIsOnPause(boolean isOnPause) {
         this.isOnPause = isOnPause;
     }
 

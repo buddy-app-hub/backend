@@ -11,11 +11,11 @@ public class MeetingLocation {
 
     // Getters and setters
 
-    public boolean isEldersHome() {
+    public boolean getIsEldersHome() {
         return isEldersHome;
     }
 
-    public void setEldersHome(boolean isEldersHome) {
+    public void setIsEldersHome(boolean isEldersHome) {
         this.isEldersHome = isEldersHome;
     }
 

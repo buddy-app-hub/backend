@@ -29,7 +29,7 @@ public class Buddy {
     private Address address;
     private BuddyProfile buddyProfile;
 
-    private final String userType = "buddy";
+    private String userType = "buddy";
 
     public String getUserType() {
         return userType;
@@ -43,27 +43,27 @@ public class Buddy {
         this.firebaseUID = firebaseUID;
     }
 
-    public boolean isBlocked() {
+    public boolean getIsBlocked() {
         return isBlocked;
     }
 
-    public void setBlocked(boolean isBlocked) {
+    public void setIsBlocked(boolean isBlocked) {
         this.isBlocked = isBlocked;
     }
 
-    public boolean isApprovedBuddy() {
+    public boolean getIsApprovedBuddy() {
         return isApprovedBuddy;
     }
 
-    public void setApprovedBuddy(boolean isApprovedBuddy) {
+    public void setIsApprovedBuddy(boolean isApprovedBuddy) {
         this.isApprovedBuddy = isApprovedBuddy;
     }
 
-    public boolean isApplicationToBeBuddyUnderReview() {
+    public boolean getIsApplicationToBeBuddyUnderReview() {
         return isApplicationToBeBuddyUnderReview;
     }
 
-    public void setApplicationToBeBuddyUnderReview(boolean isApplicationToBeBuddyUnderReview) {
+    public void setIsApplicationToBeBuddyUnderReview(boolean isApplicationToBeBuddyUnderReview) {
         this.isApplicationToBeBuddyUnderReview = isApplicationToBeBuddyUnderReview;
     }
 
@@ -83,11 +83,11 @@ public class Buddy {
         this.registrationDate = registrationDate;
     }
 
-    public boolean isIdentityValidated() {
+    public boolean getIsIdentityValidated() {
         return isIdentityValidated;
     }
 
-    public void setIdentityValidated(boolean isIdentityValidated) {
+    public void setIsIdentityValidated(boolean isIdentityValidated) {
         this.isIdentityValidated = isIdentityValidated;
     }
 
