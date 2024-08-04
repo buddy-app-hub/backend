@@ -1,6 +1,6 @@
 package org.buddy.backend.models;
 
-public class Availability {
+public class TimeOfDay {
     private String dayOfWeek;
     private String from;
     private String to;

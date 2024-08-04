@@ -8,7 +8,7 @@ public class BuddyProfile {
     private StudentDetails studentDetails;
     private WorkerDetails workerDetails;
     private List<Interest> interests;
-    private List<Availability> availability;
+    private List<TimeOfDay> availability;
 
     // Getters and setters
 
@@ -52,11 +52,11 @@ public class BuddyProfile {
         this.interests = interests;
     }
 
-    public List<Availability> getAvailability() {
+    public List<TimeOfDay> getAvailability() {
         return availability;
     }
 
-    public void setAvailability(List<Availability> availability) {
+    public void setAvailability(List<TimeOfDay> availability) {
         this.availability = availability;
     }
 
