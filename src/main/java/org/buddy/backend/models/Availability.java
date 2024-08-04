@@ -2,7 +2,6 @@ package org.buddy.backend.models;
 
 public class Availability {
     private String dayOfWeek;
-    private String availableHours;
     private String from;
     private String to;
 
@@ -13,14 +12,6 @@ public class Availability {
 
     public void setDayOfWeek(String dayOfWeek) {
         this.dayOfWeek = dayOfWeek;
-    }
-
-    public String getAvailableHours() {
-        return availableHours;
-    }
-
-    public void setAvailableHours(String availableHours) {
-        this.availableHours = availableHours;
     }
 
     public String getFrom() {
@@ -43,7 +34,6 @@ public class Availability {
     public String toString() {
         return "Availability{" +
                 "dayOfWeek='" + dayOfWeek + '\'' +
-                ", availableHours='" + availableHours + '\'' +
                 ", from='" + from + '\'' +
                 ", to='" + to + '\'' +
                 '}';
