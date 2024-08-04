@@ -22,7 +22,7 @@ public class Elder {
     private String nationality;
     private String maritalStatus;
     private String email;
-    private String phoneNumber;
+    private PhoneNumber phoneNumber;
     private IdentityCard identityCard;
     private Address address;
     private ElderProfile elderProfile;
@@ -141,11 +141,11 @@ public class Elder {
         this.email = email;
     }
 
-    public String getPhoneNumber() {
+    public PhoneNumber getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(PhoneNumber phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
