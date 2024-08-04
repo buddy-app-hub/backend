@@ -15,7 +15,7 @@ public class ElderService {
         return elderRepository.findElderByFirstName(firstName);
     }
 
-    public List<Elder> getAllBuddies() {
+    public List<Elder> getAllElders() {
         return elderRepository.findAll();
     }
 
@@ -29,7 +29,7 @@ public class ElderService {
 
     public Elder updateElder(String id, Elder elder) {
         if (elderRepository.existsById(id)) {
-            elder.setId(id);
+            elder.setFirebaseUID(id);
             return elderRepository.save(elder);
         }
         return null;

@@ -29,7 +29,7 @@ public class BuddyService {
 
     public Buddy updateBuddy(String id, Buddy buddy) {
         if (buddyRepository.existsById(id)) {
-            buddy.setId(id);
+            buddy.setFirebaseUID(id);
             return buddyRepository.save(buddy);
         }
         return null;

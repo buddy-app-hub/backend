@@ -28,8 +28,8 @@ public class ElderController {
     private ElderService elderService;
 
     @GetMapping
-    public List<Elder> getAllBuddies() {
-        return elderService.getAllBuddies();
+    public List<Elder> getAllElders() {
+        return elderService.getAllElders();
     }
 
     @GetMapping("/{id}")
