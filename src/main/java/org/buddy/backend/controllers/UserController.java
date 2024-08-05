@@ -2,6 +2,7 @@ package org.buddy.backend.controllers;
 
 import org.buddy.backend.models.Buddy;
 import org.buddy.backend.models.Elder;
+import org.buddy.backend.models.UserWithPendingSignUp;
 import org.buddy.backend.services.BuddyService;
 import org.buddy.backend.services.ElderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,9 @@ public class UserController {
         Elder elder = elderService.findByFirebaseUID(firebaseUID);
         if (elder != null) {
             return ResponseEntity.ok(elder);
+        }
+        if(firebaseUID != null){
+            return ResponseEntity.ok(new UserWithPendingSignUp());
         }
         return ResponseEntity.notFound().build();
     }
