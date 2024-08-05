@@ -2,7 +2,7 @@ package org.buddy.backend.models;
 
 public class Address {
     private String streetName;
-    private String streetNumber;
+    private Integer streetNumber;
     private String apartmentNumber;
     private String city;
     private String state;
@@ -17,11 +17,11 @@ public class Address {
         this.streetName = streetName;
     }
 
-    public String getStreetNumber() {
+    public Integer getStreetNumber() {
         return streetNumber;
     }
 
-    public void setStreetNumber(String streetNumber) {
+    public void setStreetNumber(Integer streetNumber) {
         this.streetNumber = streetNumber;
     }
 

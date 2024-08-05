@@ -4,18 +4,18 @@ public class MeetingLocation {
     private boolean isEldersHome = false;
     private String placeName;
     private String streetName;
-    private String streetNumber;
+    private Integer streetNumber;
     private String city;
     private String state;
     private String country;
 
     // Getters and setters
 
-    public boolean isEldersHome() {
+    public boolean getIsEldersHome() {
         return isEldersHome;
     }
 
-    public void setEldersHome(boolean isEldersHome) {
+    public void setIsEldersHome(boolean isEldersHome) {
         this.isEldersHome = isEldersHome;
     }
 
@@ -35,11 +35,11 @@ public class MeetingLocation {
         this.streetName = streetName;
     }
 
-    public String getStreetNumber() {
+    public Integer getStreetNumber() {
         return streetNumber;
     }
 
-    public void setStreetNumber(String streetNumber) {
+    public void setStreetNumber(Integer streetNumber) {
         this.streetNumber = streetNumber;
     }
 

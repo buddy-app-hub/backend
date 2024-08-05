@@ -12,7 +12,7 @@ public class Elder {
     private boolean isBlocked = false;
     private String registrationMethod;
     private Date registrationDate;
-    private boolean lovedOneMode;
+    private boolean onLovedOneMode;
     private LovedOne lovedOne;
     private String firstName;
     private String lastName;
@@ -27,7 +27,11 @@ public class Elder {
     private Address address;
     private ElderProfile elderProfile;
 
-    // Getters and setters
+    private String userType = "elder";
+
+    public String getUserType() {
+        return userType;
+    }
 
     public String getFirebaseUID() {
         return firebaseUID;
@@ -37,11 +41,11 @@ public class Elder {
         this.firebaseUID = firebaseUID;
     }
 
-    public boolean isBlocked() {
+    public boolean getIsBlocked() {
         return isBlocked;
     }
 
-    public void setBlocked(boolean isBlocked) {
+    public void setIsBlocked(boolean isBlocked) {
         this.isBlocked = isBlocked;
     }
 
@@ -61,12 +65,12 @@ public class Elder {
         this.registrationDate = registrationDate;
     }
 
-    public boolean isLovedOneMode() {
-        return lovedOneMode;
-    }
+    public boolean getOnLovedOneMode() {
+        return onLovedOneMode;
+    }   
 
-    public void setLovedOneMode(boolean lovedOneMode) {
-        this.lovedOneMode = lovedOneMode;
+    public void setOnLovedOneMode(boolean onLovedOneMode) {
+        this.onLovedOneMode = onLovedOneMode;
     }
 
     public LovedOne getLovedOne() {
@@ -180,7 +184,7 @@ public class Elder {
                 ", isBlocked=" + isBlocked +
                 ", registrationMethod='" + registrationMethod + '\'' +
                 ", registrationDate=" + registrationDate +
-                ", lovedOneMode=" + lovedOneMode +
+                ", onLovedOneMode=" + onLovedOneMode +
                 ", lovedOne=" + lovedOne +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
