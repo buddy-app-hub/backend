@@ -1,0 +1,43 @@
+version: '3.9'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        JAR_FILE: build/libs/*.jar
+        PORT: ${PORT} # Used in Dockerfile at build time. Read from .env
+        FIREBASE_KEY: ${FIREBASE_KEY}
+    ports:
+      - '${PORT}:${PORT}'
+    environment: # Used during container runtime. Read from .env
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+      - PORT=${PORT}
+      - DATABASE_URI=mongodb://${DB_USERNAME}:${DB_PASSWORD}@mongodb:${DB_PORT}/admin?retryWrites=true&w=majority
+    volumes:
+      - ./src/main/resources:/app/config
+    networks:
+      - buddy-network
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - '${DB_PORT}:${DB_PORT}'
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${DB_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${DB_PASSWORD}
+      - MONGO_INITDB_DATABASE=admin # Tiene que ser admin porque es donde crea el usuario que especificamos con las variables de arriba
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - buddy-network
+
+networks:
+  buddy-network:
+    driver: bridge
+
+volumes:
+  mongo-data:
