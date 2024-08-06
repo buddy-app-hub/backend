@@ -7,7 +7,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.env.Environment;
+import java.util.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Configuration
@@ -19,11 +23,22 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-        .authorizeHttpRequests((requests) -> requests
-            .requestMatchers("/**").permitAll()
-            .anyRequest().authenticated()
-        );
+        http.cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
+            @Override
+            public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+                CorsConfiguration corsConfiguration = new CorsConfiguration();
+                corsConfiguration.setAllowCredentials(true);
+                corsConfiguration.setAllowedOriginPatterns(Collections.singletonList("*"));
+                // corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+                // TODO: cambiar a esto y sacar el *
+                corsConfiguration.setAllowedMethods(Collections.singletonList("*"));
+                corsConfiguration.setAllowedHeaders(Collections.singletonList("*"));
+                return corsConfiguration;
+            }
+        }))
+                .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers("/**").permitAll()
+                        .anyRequest().authenticated());
 
         // TODO: sacar para produccion
         http.csrf(AbstractHttpConfigurer::disable);
