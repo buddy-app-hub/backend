@@ -19,6 +19,7 @@ import org.buddy.backend.models.Buddy;
 import org.buddy.backend.models.BuddyProfile;
 import org.buddy.backend.models.Elder;
 import org.buddy.backend.models.ElderProfile;
+import org.buddy.backend.models.PersonalData;
 import org.buddy.backend.services.ElderService;
 
 import java.util.List;
@@ -64,6 +65,15 @@ public class ElderController {
     @PatchMapping("/{id}/profile")
     public ResponseEntity<Elder> updateElderProfile(@PathVariable String id, @RequestBody ElderProfile updatedProfile) {
         Elder updatedElder = elderService.updateElderProfile(id, updatedProfile);
+        if (updatedElder != null) {
+            return ResponseEntity.ok(updatedElder);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PatchMapping("/{id}/personaldata")
+    public ResponseEntity<Elder> updateElderPersonalData(@PathVariable String id, @RequestBody PersonalData updatedPersonalData) {
+        Elder updatedElder = elderService.updateElderPersonalData(id, updatedPersonalData);
         if (updatedElder != null) {
             return ResponseEntity.ok(updatedElder);
         }

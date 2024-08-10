@@ -7,6 +7,7 @@ import org.buddy.backend.repositories.BuddyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import org.buddy.backend.models.PersonalData;
 
 @Service
 public class BuddyService {
@@ -48,6 +49,17 @@ public class BuddyService {
         }
 
         buddy.setBuddyProfile(updatedProfile);
+
+        return buddyRepository.save(buddy);
+    }
+
+    public Buddy updateBuddyPersonalData(String firebaseUID, PersonalData updatedPersonalData) {
+        Buddy buddy = buddyRepository.findBuddyByFirebaseUID(firebaseUID);
+        if (buddy == null) {
+            throw new ResourceNotFoundException("Buddy not found with firebaseUID: " + firebaseUID);
+        }
+
+        buddy.setPersonalData(updatedPersonalData);
 
         return buddyRepository.save(buddy);
     }
