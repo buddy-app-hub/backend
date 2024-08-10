@@ -1,6 +1,10 @@
 package org.buddy.backend.services;
 
+import org.buddy.backend.exceptions.ResourceNotFoundException;
+import org.buddy.backend.models.Buddy;
+import org.buddy.backend.models.BuddyProfile;
 import org.buddy.backend.models.Elder;
+import org.buddy.backend.models.ElderProfile;
 import org.buddy.backend.repositories.ElderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,4 +42,16 @@ public class ElderService {
     public Elder findByFirebaseUID(String firebaseUID) {
         return elderRepository.findElderByFirebaseUID(firebaseUID);
     }
+
+    public Elder updateElderProfile(String firebaseUID, ElderProfile updatedProfile) {
+        Elder elder = elderRepository.findElderByFirebaseUID(firebaseUID);
+        if (elder == null) {
+            throw new ResourceNotFoundException("Elder not found with firebaseUID: " + firebaseUID);
+        }
+
+        elder.setElderProfile(updatedProfile);
+
+        return elderRepository.save(elder);
+    }
+
 }

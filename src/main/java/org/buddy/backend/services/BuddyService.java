@@ -1,6 +1,8 @@
 package org.buddy.backend.services;
 
+import org.buddy.backend.exceptions.ResourceNotFoundException;
 import org.buddy.backend.models.Buddy;
+import org.buddy.backend.models.BuddyProfile;
 import org.buddy.backend.repositories.BuddyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,5 +39,16 @@ public class BuddyService {
 
     public Buddy findByFirebaseUID(String firebaseUID) {
         return buddyRepository.findBuddyByFirebaseUID(firebaseUID);
+    }
+
+    public Buddy updateBuddyProfile(String firebaseUID, BuddyProfile updatedProfile) {
+        Buddy buddy = buddyRepository.findBuddyByFirebaseUID(firebaseUID);
+        if (buddy == null) {
+            throw new ResourceNotFoundException("Buddy not found with firebaseUID: " + firebaseUID);
+        }
+
+        buddy.setBuddyProfile(updatedProfile);
+
+        return buddyRepository.save(buddy);
     }
 }
