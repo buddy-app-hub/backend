@@ -11,10 +11,6 @@ public class ElderService {
     @Autowired
     private ElderRepository elderRepository;
 
-    public Elder getElderByFirstName(String firstName) {
-        return elderRepository.findElderByFirstName(firstName);
-    }
-
     public List<Elder> getAllElders() {
         return elderRepository.findAll();
     }

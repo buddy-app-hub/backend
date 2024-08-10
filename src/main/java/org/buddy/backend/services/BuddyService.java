@@ -11,10 +11,6 @@ public class BuddyService {
     @Autowired
     private BuddyRepository buddyRepository;
 
-    public Buddy getBuddyByFirstName(String firstName) {
-        return buddyRepository.findBuddyByFirstName(firstName);
-    }
-
     public List<Buddy> getAllBuddies() {
         return buddyRepository.findAll();
     }
