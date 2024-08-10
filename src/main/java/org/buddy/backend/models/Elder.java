@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
-@Document(collection="elders")
+@Document(collection = "elders")
 public class Elder {
     @Id
     private String firebaseUID;
@@ -14,17 +14,10 @@ public class Elder {
     private Date registrationDate;
     private boolean onLovedOneMode;
     private LovedOne lovedOne;
-    private String firstName;
-    private String lastName;
-    private Integer age;
-    private String gender;
-    private Date birthDate;
-    private String nationality;
-    private String maritalStatus;
+    private PersonalData personalData;
     private String email;
     private PhoneNumber phoneNumber;
     private IdentityCard identityCard;
-    private Address address;
     private ElderProfile elderProfile;
 
     private String userType = "elder";
@@ -67,7 +60,7 @@ public class Elder {
 
     public boolean getOnLovedOneMode() {
         return onLovedOneMode;
-    }   
+    }
 
     public void setOnLovedOneMode(boolean onLovedOneMode) {
         this.onLovedOneMode = onLovedOneMode;
@@ -81,60 +74,12 @@ public class Elder {
         this.lovedOne = lovedOne;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public PersonalData getPersonalData() {
+        return personalData;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public Date getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
-    }
-
-    public String getNationality() {
-        return nationality;
-    }
-
-    public void setNationality(String nationality) {
-        this.nationality = nationality;
-    }
-
-    public String getMaritalStatus() {
-        return maritalStatus;
-    }
-
-    public void setMaritalStatus(String maritalStatus) {
-        this.maritalStatus = maritalStatus;
+    public void setPersonalData(PersonalData personalData) {
+        this.personalData = personalData;
     }
 
     public String getEmail() {
@@ -161,14 +106,6 @@ public class Elder {
         this.identityCard = identityCard;
     }
 
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
     public ElderProfile getElderProfile() {
         return elderProfile;
     }
@@ -186,17 +123,10 @@ public class Elder {
                 ", registrationDate=" + registrationDate +
                 ", onLovedOneMode=" + onLovedOneMode +
                 ", lovedOne=" + lovedOne +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", age=" + age +
-                ", gender='" + gender + '\'' +
-                ", birthDate=" + birthDate +
-                ", nationality='" + nationality + '\'' +
-                ", maritalStatus='" + maritalStatus + '\'' +
+                ", personalData='" + personalData + '\'' +
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", identityCard=" + identityCard +
-                ", address=" + address +
                 ", elderProfile=" + elderProfile +
                 '}';
     }

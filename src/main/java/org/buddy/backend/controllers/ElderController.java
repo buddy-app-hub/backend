@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -14,7 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 
+import org.buddy.backend.models.Buddy;
+import org.buddy.backend.models.BuddyProfile;
 import org.buddy.backend.models.Elder;
+import org.buddy.backend.models.ElderProfile;
+import org.buddy.backend.models.PersonalData;
 import org.buddy.backend.services.ElderService;
 
 import java.util.List;
@@ -51,6 +56,24 @@ public class ElderController {
     @PutMapping("/{id}")
     public ResponseEntity<Elder> updateElder(@PathVariable String id, @RequestBody Elder elder) {
         Elder updatedElder = elderService.updateElder(id, elder);
+        if (updatedElder != null) {
+            return ResponseEntity.ok(updatedElder);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PatchMapping("/{id}/profile")
+    public ResponseEntity<Elder> updateElderProfile(@PathVariable String id, @RequestBody ElderProfile updatedProfile) {
+        Elder updatedElder = elderService.updateElderProfile(id, updatedProfile);
+        if (updatedElder != null) {
+            return ResponseEntity.ok(updatedElder);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PatchMapping("/{id}/personaldata")
+    public ResponseEntity<Elder> updateElderPersonalData(@PathVariable String id, @RequestBody PersonalData updatedPersonalData) {
+        Elder updatedElder = elderService.updateElderPersonalData(id, updatedPersonalData);
         if (updatedElder != null) {
             return ResponseEntity.ok(updatedElder);
         }

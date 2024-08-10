@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
-@Document(collection="buddies")
+@Document(collection = "buddies")
 public class Buddy {
     @Id
     private String firebaseUID;
@@ -15,18 +15,11 @@ public class Buddy {
     private String registrationMethod;
     private Date registrationDate;
     private boolean isIdentityValidated = false;
-    private String firstName;
-    private String lastName;
-    private Integer age;
-    private String gender;
-    private Date birthDate;
-    private String nationality;
-    private String maritalStatus;
+    private PersonalData personalData;
     private String email;
     private PhoneNumber phoneNumber;
     private IdentityCard identityCard;
     private BankAccount bankAccount;
-    private Address address;
     private BuddyProfile buddyProfile;
 
     private String userType = "buddy";
@@ -91,60 +84,12 @@ public class Buddy {
         this.isIdentityValidated = isIdentityValidated;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public PersonalData getPersonalData() {
+        return personalData;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public Date getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
-    }
-
-    public String getNationality() {
-        return nationality;
-    }
-
-    public void setNationality(String nationality) {
-        this.nationality = nationality;
-    }
-
-    public String getMaritalStatus() {
-        return maritalStatus;
-    }
-
-    public void setMaritalStatus(String maritalStatus) {
-        this.maritalStatus = maritalStatus;
+    public void setPersonalData(PersonalData personalData) {
+        this.personalData = personalData;
     }
 
     public String getEmail() {
@@ -179,14 +124,6 @@ public class Buddy {
         this.bankAccount = bankAccount;
     }
 
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
     public BuddyProfile getBuddyProfile() {
         return buddyProfile;
     }
@@ -205,18 +142,11 @@ public class Buddy {
                 ", registrationMethod='" + registrationMethod + '\'' +
                 ", registrationDate=" + registrationDate +
                 ", isIdentityValidated=" + isIdentityValidated +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", age=" + age +
-                ", gender='" + gender + '\'' +
-                ", birthDate=" + birthDate +
-                ", nationality='" + nationality + '\'' +
-                ", maritalStatus='" + maritalStatus + '\'' +
+                ", personalData='" + personalData + '\'' +                
                 ", email='" + email + '\'' +
                 ", phoneNumber=" + phoneNumber +
                 ", identityCard=" + identityCard +
                 ", bankAccount=" + bankAccount +
-                ", address=" + address +
                 ", buddyProfile=" + buddyProfile +
                 '}';
     }
