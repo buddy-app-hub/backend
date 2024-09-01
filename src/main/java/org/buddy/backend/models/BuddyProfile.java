@@ -1,5 +1,6 @@
 package org.buddy.backend.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BuddyProfile {
@@ -9,6 +10,7 @@ public class BuddyProfile {
     private WorkerDetails workerDetails;
     private List<Interest> interests;
     private List<TimeOfDay> availability;
+    private List<String> photos = new ArrayList<>(); // Array ordenado con los nombres de las fotos cargadas en Firebase Storage
 
     // Getters and setters
 
@@ -60,6 +62,17 @@ public class BuddyProfile {
         this.availability = availability;
     }
 
+    public List<String> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<String> photos) {
+        if (photos == null || photos.size() > 6) {
+            throw new IllegalArgumentException("La lista de fotos debe ser como mucho de 6 elementos.");
+        }
+        this.photos = photos;
+    }
+
     @Override
     public String toString() {
         return "BuddyProfile{" +
@@ -69,6 +82,7 @@ public class BuddyProfile {
                 ", workerDetails=" + workerDetails +
                 ", interests=" + interests +
                 ", availability=" + availability +
+                ", photos=" + photos +
                 '}';
     }
 }
