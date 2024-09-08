@@ -7,7 +7,7 @@ on:
 
 env:
   AWS_REGION: sa-east-1
-  ECR_REPOSITORY: buddy/dev_backend
+  ECR_REPOSITORY: dev/backend
   ECS_SERVICE: dev-backend-service
   ECS_CLUSTER: buddy-cluster
 
