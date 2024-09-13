@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+env:
+  AWS_REGION: sa-east-1
+  ECR_REPOSITORY: prod/backend
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -31,15 +35,26 @@ jobs:
       - name: Build with Gradle Wrapper
         env:
           FIREBASE_KEY: ${{ secrets.FIREBASE_KEY }}
-        run: ./gradlew build
+        run:
+          ./gradlew build
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
 
-      - name: Build and push Docker image
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t agusgabrielli/buddy:prod --build-arg JAR_FILE=build/libs/*.jar --build-arg PORT=${{ vars.PORT }} --build-arg FIREBASE_KEY=${{ secrets.FIREBASE_KEY }} .
-          docker push agusgabrielli/buddy:prod
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG --build-arg JAR_FILE=build/libs/*.jar --build-arg PORT=${{ vars.PROD_PORT }} --build-arg FIREBASE_KEY=${{ secrets.FIREBASE_KEY }} .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
