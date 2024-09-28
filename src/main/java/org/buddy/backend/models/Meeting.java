@@ -11,6 +11,8 @@ public class Meeting {
     private boolean isRescheduled = false;
     private String activity;
     private Date dateLastModification;
+    private int elderRatingForBuddy; // Rating that Elder made to Buddy
+    private int buddyRatingForElder; // Rating that Buddy made to Elder
 
     // Getters and setters
 
@@ -78,6 +80,22 @@ public class Meeting {
         this.dateLastModification = dateLastModification;
     }
 
+    public int getElderRatingForBuddy() {
+        return elderRatingForBuddy;
+    }
+
+    public void setElderRatingForBuddy(int elderRatingForBuddy) {
+        this.elderRatingForBuddy = elderRatingForBuddy;
+    }
+
+    public int getBuddyRatingForElder() {
+        return buddyRatingForElder;
+    }
+
+    public void setBuddyRatingForElder(int buddyRatingForElder) {
+        this.buddyRatingForElder = buddyRatingForElder;
+    }
+
     @Override
     public String toString() {
         return "Meeting{" +
@@ -89,6 +107,8 @@ public class Meeting {
                 ", isRescheduled=" + isRescheduled +
                 ", activity='" + activity + '\'' +
                 ", dateLastModification='" + dateLastModification + '\'' +
+                ", elderRatingForBuddy='" + elderRatingForBuddy + '\'' +
+                ", buddyRatingForElder='" + buddyRatingForElder + '\'' +
                 '}';
     }
 }
