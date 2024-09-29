@@ -19,6 +19,7 @@ import org.buddy.backend.models.BuddyWithinRange;
 import org.buddy.backend.models.Elder;
 import org.buddy.backend.models.ElderProfile;
 import org.buddy.backend.models.PersonalData;
+import org.buddy.backend.models.RecommendedBuddy;
 import org.buddy.backend.services.ElderService;
 
 import java.util.List;
@@ -90,6 +91,15 @@ public class ElderController {
         List<BuddyWithinRange> buddiesWithinRange = elderService.getBuddiesWithinRange(id);
         if (buddiesWithinRange != null) {
             return ResponseEntity.ok(buddiesWithinRange);
+        }
+        return ResponseEntity.notFound().build();
+    }
+    
+    @PatchMapping("/{id}/buddies/recommended")
+    public ResponseEntity<Elder> updateRecommendedBuddies(@PathVariable String id, @RequestBody List<RecommendedBuddy> recommendedBuddies) {
+        Elder updatedElder = elderService.updateRecommendedBuddies(id, recommendedBuddies);
+        if (updatedElder != null) {
+            return ResponseEntity.ok(updatedElder);
         }
         return ResponseEntity.notFound().build();
     }

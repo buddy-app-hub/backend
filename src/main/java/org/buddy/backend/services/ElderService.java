@@ -3,7 +3,6 @@ package org.buddy.backend.services;
 import org.buddy.backend.exceptions.ResourceNotFoundException;
 import org.buddy.backend.helpers.AddressHelper;
 import org.buddy.backend.models.Address;
-import org.buddy.backend.models.Buddy;
 import org.buddy.backend.models.BuddyWithinRange;
 import org.buddy.backend.models.PersonalData;
 import org.buddy.backend.models.RecommendedBuddy;
@@ -111,6 +110,17 @@ public class ElderService {
             return buddiesInRange;
         }
 
+        return null;
+    }
+
+    public Elder updateRecommendedBuddies(String id, List<RecommendedBuddy> recommendedBuddies) {
+        Elder elder = elderRepository.findById(id).orElse(null);
+
+        if (elder != null) {
+            elder.setRecommendedBuddies(recommendedBuddies);
+
+            return elderRepository.save(elder);
+        }
         return null;
     }
 }
