@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 
+import org.buddy.backend.models.BuddyWithinRange;
 import org.buddy.backend.models.Elder;
 import org.buddy.backend.models.ElderProfile;
 import org.buddy.backend.models.PersonalData;
-import org.buddy.backend.models.RecommendedBuddy;
 import org.buddy.backend.services.ElderService;
 
 import java.util.List;
@@ -86,8 +86,8 @@ public class ElderController {
     }
 
     @GetMapping("/{id}/buddies")
-    public ResponseEntity<List<RecommendedBuddy>> getBuddiesWithinRange(@PathVariable String id) {
-        List<RecommendedBuddy> buddiesWithinRange = elderService.getBuddiesWithinRange(id);
+    public ResponseEntity<List<BuddyWithinRange>> getBuddiesWithinRange(@PathVariable String id) {
+        List<BuddyWithinRange> buddiesWithinRange = elderService.getBuddiesWithinRange(id);
         if (buddiesWithinRange != null) {
             return ResponseEntity.ok(buddiesWithinRange);
         }

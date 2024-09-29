@@ -3,19 +3,19 @@ package org.buddy.backend.models;
 import java.util.Date;
 
 public class RecommendedBuddy {
-    private Buddy buddy;
+    private String buddyID;
     private Double score;
     private Double distanceToKM;
     private boolean isDismissed;
     private Date dateDismissed;
 
 
-    public Buddy getBuddy() {
-        return buddy;
+    public String getBuddyID() {
+        return buddyID;
     }
 
-    public void setBuddy(Buddy buddy) {
-        this.buddy = buddy;
+    public void setBuddyID(String buddyID) {
+        this.buddyID = buddyID;
     }
 
     public Double getScore() {
@@ -53,7 +53,7 @@ public class RecommendedBuddy {
     @Override
     public String toString() {
         return "RecommendedBuddy{" +
-                ", buddy=" + buddy +
+                ", buddyID=" + buddyID +
                 ", score=" + score +
                 ", distanceToKM=" + distanceToKM +
                 ", isDismissed=" + isDismissed +

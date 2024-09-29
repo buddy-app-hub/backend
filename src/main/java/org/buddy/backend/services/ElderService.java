@@ -4,6 +4,7 @@ import org.buddy.backend.exceptions.ResourceNotFoundException;
 import org.buddy.backend.helpers.AddressHelper;
 import org.buddy.backend.models.Address;
 import org.buddy.backend.models.Buddy;
+import org.buddy.backend.models.BuddyWithinRange;
 import org.buddy.backend.models.PersonalData;
 import org.buddy.backend.models.RecommendedBuddy;
 import org.buddy.backend.models.Elder;
@@ -89,7 +90,7 @@ public class ElderService {
         return elderRepository.save(elder);
     }
 
-    public List<RecommendedBuddy> getBuddiesWithinRange(String id) {
+    public List<BuddyWithinRange> getBuddiesWithinRange(String id) {
         // Obtenemos el rango en km de preferencia del elder
         Elder elder = elderRepository.findById(id).orElse(null);
 
@@ -102,7 +103,7 @@ public class ElderService {
              * 1) que esten en el rango de preferencia de distancia del elder
              * 2) que el elder este dentro del rango de preferencia de los buddies que cumplen con 1)
              */
-            List<RecommendedBuddy> buddiesInRange = buddyRepository.findBuddiesWithinRange(
+            List<BuddyWithinRange> buddiesInRange = buddyRepository.findBuddiesWithinRange(
                 coords[0], coords[1],
                 rangeInMeters
             );

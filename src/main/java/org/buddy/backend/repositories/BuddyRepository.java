@@ -3,7 +3,7 @@ package org.buddy.backend.repositories;
 import java.util.List;
 
 import org.buddy.backend.models.Buddy;
-import org.buddy.backend.models.RecommendedBuddy;
+import org.buddy.backend.models.BuddyWithinRange;
 import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
@@ -20,5 +20,5 @@ public interface BuddyRepository extends MongoRepository<Buddy, String> {
             "{ '$geoNear': { 'near': { 'type': 'Point', 'coordinates': [?0, ?1] }, 'distanceField': 'distanceBetween', 'maxDistance': ?2, 'spherical': true } } }",
             "{ '$match': { '$expr': { '$gte': [ '$buddyProfile.connectionPreferences.maxDistanceKM', { '$divide': [ '$distanceBetween', 1000 ] } ] } } } }",
             "{ '$project': { 'buddy': '$$ROOT', 'distanceToKM': { '$divide': [ '$distanceBetween', 1000 ] } } }" })
-    List<RecommendedBuddy> findBuddiesWithinRange(Double longuitude, Double latitude, int maxDistanceMeters);
+    List<BuddyWithinRange> findBuddiesWithinRange(Double longuitude, Double latitude, int maxDistanceMeters);
 }
