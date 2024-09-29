@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 
-import org.buddy.backend.models.Buddy;
-import org.buddy.backend.models.BuddyProfile;
 import org.buddy.backend.models.Elder;
 import org.buddy.backend.models.ElderProfile;
 import org.buddy.backend.models.PersonalData;

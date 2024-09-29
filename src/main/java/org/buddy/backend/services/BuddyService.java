@@ -1,6 +1,8 @@
 package org.buddy.backend.services;
 
 import org.buddy.backend.exceptions.ResourceNotFoundException;
+import org.buddy.backend.helpers.AddressHelper;
+import org.buddy.backend.models.Address;
 import org.buddy.backend.models.Buddy;
 import org.buddy.backend.models.BuddyProfile;
 import org.buddy.backend.repositories.BuddyRepository;
@@ -13,6 +15,8 @@ import org.buddy.backend.models.PersonalData;
 public class BuddyService {
     @Autowired
     private BuddyRepository buddyRepository;
+    @Autowired
+    private AddressHelper addressHelper;
 
     public List<Buddy> getAllBuddies() {
         return buddyRepository.findAll();
@@ -23,6 +27,11 @@ public class BuddyService {
     }
 
     public Buddy createBuddy(Buddy buddy) {
+        if (buddy.getPersonalData() != null && buddy.getPersonalData().getAddress() != null) {
+            Address address = addressHelper.processCoordinatesFromAddress(buddy.getPersonalData().getAddress());
+            buddy.getPersonalData().setAddress(address);
+        }
+
         return buddyRepository.save(buddy);
     }
 
@@ -57,6 +66,16 @@ public class BuddyService {
         Buddy buddy = buddyRepository.findBuddyByFirebaseUID(firebaseUID);
         if (buddy == null) {
             throw new ResourceNotFoundException("Buddy not found with firebaseUID: " + firebaseUID);
+        }
+
+        // Si antes no tenia direccion y esta agregando la primera, o si cambio la
+        // direccion, actualizamos las coordenadas
+        if (buddy.getPersonalData().getAddress() == null
+                || !buddy.getPersonalData().getAddress().equals(updatedPersonalData.getAddress())) {
+            if (updatedPersonalData.getAddress() != null) {
+                Address address = addressHelper.processCoordinatesFromAddress(updatedPersonalData.getAddress());
+                updatedPersonalData.setAddress(address);
+            }
         }
 
         buddy.setPersonalData(updatedPersonalData);

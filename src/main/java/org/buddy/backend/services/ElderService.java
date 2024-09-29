@@ -1,8 +1,11 @@
 package org.buddy.backend.services;
 
 import org.buddy.backend.exceptions.ResourceNotFoundException;
+import org.buddy.backend.helpers.AddressHelper;
+import org.buddy.backend.models.Address;
 import org.buddy.backend.models.Buddy;
 import org.buddy.backend.models.BuddyProfile;
+import org.buddy.backend.models.Coordinates;
 import org.buddy.backend.models.PersonalData;
 import org.buddy.backend.models.Elder;
 import org.buddy.backend.models.ElderProfile;
@@ -10,12 +13,15 @@ import org.buddy.backend.models.PersonalData;
 import org.buddy.backend.repositories.ElderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
 public class ElderService {
     @Autowired
     private ElderRepository elderRepository;
+    @Autowired
+    private AddressHelper addressHelper;
 
     public List<Elder> getAllElders() {
         return elderRepository.findAll();
@@ -26,6 +32,11 @@ public class ElderService {
     }
 
     public Elder createElder(Elder elder) {
+        if (elder.getPersonalData() != null && elder.getPersonalData().getAddress() != null) {
+            Address address = addressHelper.processCoordinatesFromAddress(elder.getPersonalData().getAddress());
+            elder.getPersonalData().setAddress(address);
+        }
+
         return elderRepository.save(elder);
     }
 
@@ -62,9 +73,18 @@ public class ElderService {
             throw new ResourceNotFoundException("Elder not found with firebaseUID: " + firebaseUID);
         }
 
+        // Si antes no tenia direccion y esta agregando la primera, o si cambio la
+        // direccion, actualizamos las coordenadas
+        if (elder.getPersonalData().getAddress() == null
+                || !elder.getPersonalData().getAddress().equals(updatedPersonalData.getAddress())) {
+            if (updatedPersonalData.getAddress() != null) {
+                Address address = addressHelper.processCoordinatesFromAddress(updatedPersonalData.getAddress());
+                updatedPersonalData.setAddress(address);
+            }
+        }
+
         elder.setPersonalData(updatedPersonalData);
 
         return elderRepository.save(elder);
     }
-
 }

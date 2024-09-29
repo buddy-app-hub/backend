@@ -15,6 +15,7 @@ services:
       - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
       - PORT=${PORT}
       - DATABASE_URI=mongodb://${DB_USERNAME}:${DB_PASSWORD}@mongodb:${DB_PORT}/admin?retryWrites=true&w=majority
+      - GEOCODE_MAPS_API_KEY=${GEOCODE_MAPS_API_KEY}
     volumes:
       - ./src/main/resources:/app/config
     networks:

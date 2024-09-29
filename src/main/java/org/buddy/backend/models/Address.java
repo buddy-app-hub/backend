@@ -1,5 +1,7 @@
 package org.buddy.backend.models;
 
+import java.util.Objects;
+
 public class Address {
     private String streetName;
     private Integer streetNumber;
@@ -86,5 +88,29 @@ public class Address {
                 ", country='" + country + '\'' +
                 ", coordinates='" + coordinates + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        // Si son la misma referencia, directamente es true
+        if (this == obj)
+            return true;
+        // Si son de distintas clases, directamente es false
+        if (!(obj instanceof Address))
+            return false;
+
+        Address other = (Address) obj;
+        return streetName.equals(other.streetName) &&
+                streetNumber.equals(other.streetNumber) &&
+                apartmentNumber.equals(other.apartmentNumber) &&
+                city.equals(other.city) &&
+                state.equals(other.state) &&
+                postalCode.equals(other.postalCode) &&
+                country.equals(other.country);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(streetName, streetNumber, apartmentNumber, city, state, postalCode, country);
     }
 }
