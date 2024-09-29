@@ -8,6 +8,7 @@ public class Address {
     private String state;
     private String postalCode;
     private String country;
+    private Coordinates coordinates;
 
     public String getStreetName() {
         return streetName;
@@ -65,6 +66,14 @@ public class Address {
         this.country = country;
     }
 
+    public Coordinates getCoordinates() {
+        return coordinates;
+    }
+
+    public void setCoordinates(Coordinates coordinates) {
+        this.coordinates = coordinates;
+    }
+
     @Override
     public String toString() {
         return "Address{" +
@@ -75,6 +84,7 @@ public class Address {
                 ", state='" + state + '\'' +
                 ", postalCode='" + postalCode + '\'' +
                 ", country='" + country + '\'' +
+                ", coordinates='" + coordinates + '\'' +
                 '}';
     }
 }

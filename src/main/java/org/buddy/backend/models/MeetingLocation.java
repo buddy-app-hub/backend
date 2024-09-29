@@ -8,6 +8,7 @@ public class MeetingLocation {
     private String city;
     private String state;
     private String country;
+    private Coordinates coordinates;
 
     // Getters and setters
 
@@ -67,6 +68,14 @@ public class MeetingLocation {
         this.country = country;
     }
 
+    public Coordinates getCoordinates() {
+        return coordinates;
+    }
+
+    public void setCoordinates(Coordinates coordinates) {
+        this.coordinates = coordinates;
+    }
+
     @Override
     public String toString() {
         return "MeetingLocation{" +
@@ -77,6 +86,7 @@ public class MeetingLocation {
                 ", city='" + city + '\'' +
                 ", state='" + state + '\'' +
                 ", country='" + country + '\'' +
+                ", coordinates='" + coordinates + '\'' +
                 '}';
     }
 }
