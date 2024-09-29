@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.buddy.backend.models.Connection;
+import org.buddy.backend.models.Meeting;
 import org.buddy.backend.services.ConnectionService;
 
 import java.util.List;
@@ -76,6 +77,28 @@ public class ConnectionController {
         if (connections != null) {
             return ResponseEntity.ok(connections);
         }
+        return ResponseEntity.notFound().build();
+    }
+
+    /* Si se califica la meeting además de crearse, esto se detecta y se re-calcula el rating global del usuario al que se calificó */
+    @PostMapping("/{connectionID}/meetings")
+    public ResponseEntity<Meeting> createMeeting(@PathVariable String connectionID, @RequestBody Meeting newMeeting) {
+        Meeting createdMeeting = connectionService.createMeeting(connectionID, newMeeting);
+        if (createdMeeting != null) {
+            return ResponseEntity.ok(createdMeeting);
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
+    /* Si se califica un meeting, esto se detecta y se re-calcula el rating global del usuario al que se calificó */
+    @PutMapping("/{connectionID}/meetings/{meetingID}")
+    public ResponseEntity<Meeting> updateMeeting(@PathVariable String connectionID, @PathVariable String meetingID, @RequestBody Meeting meeting) {
+        Meeting updatedMeeting = connectionService.updateMeeting(connectionID, meetingID, meeting);
+        if (updatedMeeting != null) {
+            return ResponseEntity.ok(updatedMeeting);
+        }
+
         return ResponseEntity.notFound().build();
     }
 }

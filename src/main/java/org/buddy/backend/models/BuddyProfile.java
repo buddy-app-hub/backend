@@ -11,7 +11,7 @@ public class BuddyProfile {
     private List<Interest> interests;
     private List<TimeOfDay> availability;
     private List<String> photos = new ArrayList<>(); // Array ordenado con los nombres de las fotos cargadas en Firebase Storage
-    private int globalRating; // Average rating of each of the meetings in which he participated (1 to 5)
+    private Float globalRating; // Average rating of each of the meetings in which he participated (1 to 5)
 
     // Getters and setters
 
@@ -74,11 +74,11 @@ public class BuddyProfile {
         this.photos = photos;
     }
 
-    public int getGlobalRating() {
+    public Float getGlobalRating() {
         return globalRating;
     }
 
-    public void setGlobalRating(int globalRating) {
+    public void setGlobalRating(Float globalRating) {
         this.globalRating = globalRating;
     }
 
