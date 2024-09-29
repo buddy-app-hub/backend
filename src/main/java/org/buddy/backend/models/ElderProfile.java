@@ -9,7 +9,7 @@ public class ElderProfile {
     private List<TimeOfDay> availability;
     private List<String> photos = new ArrayList<>(); // Array ordenado con los nombres de las fotos cargadas en Firebase Storage
     private Float globalRating; // Average rating of each of the meetings in which he participated (1 to 5)
-    private ConnectionPreferences preferences;
+    private ConnectionPreferences connectionPreferences;
 
     // Getters and setters
     public String getDescription() {
@@ -56,11 +56,11 @@ public class ElderProfile {
     }
 
     public ConnectionPreferences getConnectionPreferences() {
-        return preferences;
+        return connectionPreferences;
     }
 
-    public void setConnectionPreferences(ConnectionPreferences preferences) {
-        this.preferences = preferences;
+    public void setConnectionPreferences(ConnectionPreferences connectionPreferences) {
+        this.connectionPreferences = connectionPreferences;
     }
 
     @Override
@@ -71,7 +71,7 @@ public class ElderProfile {
                 ", availability=" + availability +
                 ", photos=" + photos +
                 ", globalRating=" + globalRating +
-                ", preferences=" + preferences +
+                ", connectionPreferences=" + connectionPreferences +
                 '}';
     }
 }
