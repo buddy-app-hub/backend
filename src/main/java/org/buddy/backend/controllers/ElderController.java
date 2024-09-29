@@ -18,6 +18,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.buddy.backend.models.Elder;
 import org.buddy.backend.models.ElderProfile;
 import org.buddy.backend.models.PersonalData;
+import org.buddy.backend.models.RecommendedBuddy;
 import org.buddy.backend.services.ElderService;
 
 import java.util.List;
@@ -82,5 +83,14 @@ public class ElderController {
     public ResponseEntity<Void> deleteElder(@PathVariable String id) {
         elderService.deleteElder(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}/buddies")
+    public ResponseEntity<List<RecommendedBuddy>> getBuddiesWithinRange(@PathVariable String id) {
+        List<RecommendedBuddy> buddiesWithinRange = elderService.getBuddiesWithinRange(id);
+        if (buddiesWithinRange != null) {
+            return ResponseEntity.ok(buddiesWithinRange);
+        }
+        return ResponseEntity.notFound().build();
     }
 }

@@ -4,8 +4,8 @@ import java.util.Date;
 
 public class RecommendedBuddy {
     private Buddy buddy;
-    private int score;
-    private int distanceToKM;
+    private Double score;
+    private Double distanceToKM;
     private boolean isDismissed;
     private Date dateDismissed;
 
@@ -18,19 +18,19 @@ public class RecommendedBuddy {
         this.buddy = buddy;
     }
 
-    public int getScore() {
+    public Double getScore() {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setScore(Double score) {
         this.score = score;
     }
 
-    public int getDistanceToKM() {
+    public Double getDistanceToKM() {
         return distanceToKM;
     }
 
-    public void setDistanceToKM(int distanceToKM) {
+    public void setDistanceToKM(Double distanceToKM) {
         this.distanceToKM = distanceToKM;
     }
 

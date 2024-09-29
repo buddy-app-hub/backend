@@ -3,9 +3,12 @@ package org.buddy.backend.services;
 import org.buddy.backend.exceptions.ResourceNotFoundException;
 import org.buddy.backend.helpers.AddressHelper;
 import org.buddy.backend.models.Address;
+import org.buddy.backend.models.Buddy;
 import org.buddy.backend.models.PersonalData;
+import org.buddy.backend.models.RecommendedBuddy;
 import org.buddy.backend.models.Elder;
 import org.buddy.backend.models.ElderProfile;
+import org.buddy.backend.repositories.BuddyRepository;
 import org.buddy.backend.repositories.ElderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +19,8 @@ import java.util.List;
 public class ElderService {
     @Autowired
     private ElderRepository elderRepository;
+    @Autowired
+    private BuddyRepository buddyRepository;
     @Autowired
     private AddressHelper addressHelper;
 
@@ -82,5 +87,29 @@ public class ElderService {
         elder.setPersonalData(updatedPersonalData);
 
         return elderRepository.save(elder);
+    }
+
+    public List<RecommendedBuddy> getBuddiesWithinRange(String id) {
+        // Obtenemos el rango en km de preferencia del elder
+        Elder elder = elderRepository.findById(id).orElse(null);
+
+        if (elder != null) {
+            Double[] coords = elder.getPersonalData().getAddress().getCoordinates().getCoordinates().toArray(new Double[0]);
+            int rangeInMeters = elder.getElderProfile().getConnectionPreferences().getMaxDistanceKM() * 1000;
+            
+            /*
+             * Obtenemos un listado de buddies que cumplen con dos condiciones:
+             * 1) que esten en el rango de preferencia de distancia del elder
+             * 2) que el elder este dentro del rango de preferencia de los buddies que cumplen con 1)
+             */
+            List<RecommendedBuddy> buddiesInRange = buddyRepository.findBuddiesWithinRange(
+                coords[0], coords[1],
+                rangeInMeters
+            );
+
+            return buddiesInRange;
+        }
+
+        return null;
     }
 }
