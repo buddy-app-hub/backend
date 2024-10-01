@@ -70,7 +70,7 @@ public class BuddyService {
 
         // Si antes no tenia direccion y esta agregando la primera, o si cambio la
         // direccion, actualizamos las coordenadas
-        if (buddy.getPersonalData().getAddress() == null
+        if (buddy.getPersonalData() == null || buddy.getPersonalData().getAddress() == null
                 || !buddy.getPersonalData().getAddress().equals(updatedPersonalData.getAddress())) {
             if (updatedPersonalData.getAddress() != null) {
                 Address address = addressHelper.processCoordinatesFromAddress(updatedPersonalData.getAddress());

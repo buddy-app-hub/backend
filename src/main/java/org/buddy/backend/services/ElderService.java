@@ -3,6 +3,7 @@ package org.buddy.backend.services;
 import org.buddy.backend.exceptions.ResourceNotFoundException;
 import org.buddy.backend.helpers.AddressHelper;
 import org.buddy.backend.models.Address;
+import org.buddy.backend.models.Buddy;
 import org.buddy.backend.models.BuddyWithinRange;
 import org.buddy.backend.models.PersonalData;
 import org.buddy.backend.models.RecommendedBuddy;
@@ -76,7 +77,7 @@ public class ElderService {
 
         // Si antes no tenia direccion y esta agregando la primera, o si cambio la
         // direccion, actualizamos las coordenadas
-        if (elder.getPersonalData().getAddress() == null
+        if (elder.getPersonalData() == null || elder.getPersonalData().getAddress() == null
                 || !elder.getPersonalData().getAddress().equals(updatedPersonalData.getAddress())) {
             if (updatedPersonalData.getAddress() != null) {
                 Address address = addressHelper.processCoordinatesFromAddress(updatedPersonalData.getAddress());
@@ -120,6 +121,22 @@ public class ElderService {
             elder.setRecommendedBuddies(recommendedBuddies);
 
             return elderRepository.save(elder);
+        }
+        return null;
+    }
+
+    public List<RecommendedBuddy> getRecommendedBuddies(String id) {
+        Elder elder = elderRepository.findById(id).orElse(null);
+
+        if (elder != null) {
+            elder.getRecommendedBuddies().forEach(rb -> {
+                Buddy buddy = buddyRepository.findBuddyByFirebaseUID(rb.getBuddyID()); 
+                if (buddy != null) {
+                    rb.setBuddy(buddy); // No vamos a guardarlo en la db, solo guardamos el ID
+                }
+            });
+
+            return elder.getRecommendedBuddies();
         }
         return null;
     }

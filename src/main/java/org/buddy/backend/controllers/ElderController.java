@@ -94,6 +94,15 @@ public class ElderController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    @GetMapping("/{id}/buddies/recommended")
+    public ResponseEntity<List<RecommendedBuddy>> getRecommendedBuddies(@PathVariable String id) {
+        List<RecommendedBuddy> recommendedBuddies = elderService.getRecommendedBuddies(id);
+        if (recommendedBuddies != null) {
+            return ResponseEntity.ok(recommendedBuddies);
+        }
+        return ResponseEntity.notFound().build();
+    }
     
     @PatchMapping("/{id}/buddies/recommended")
     public ResponseEntity<Elder> updateRecommendedBuddies(@PathVariable String id, @RequestBody List<RecommendedBuddy> recommendedBuddies) {

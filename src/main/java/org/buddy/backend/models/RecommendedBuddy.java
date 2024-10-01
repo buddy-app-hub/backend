@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class RecommendedBuddy {
     private String buddyID;
+    private Buddy buddy; // No lo guardamos en la DB, solo lo usamos para devolverlo en el getRecommendedBuddies
     private Double score;
     private Double distanceToKM;
     private boolean isDismissed;
@@ -16,6 +17,14 @@ public class RecommendedBuddy {
 
     public void setBuddyID(String buddyID) {
         this.buddyID = buddyID;
+    }
+
+    public Buddy getBuddy() {
+        return buddy;
+    }
+
+    public void setBuddy(Buddy buddy) {
+        this.buddy = buddy;
     }
 
     public Double getScore() {
