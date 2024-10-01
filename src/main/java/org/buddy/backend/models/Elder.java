@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
+import java.util.List;
 
 @Document(collection = "elders")
 public class Elder {
@@ -19,6 +20,7 @@ public class Elder {
     private PhoneNumber phoneNumber;
     private IdentityCard identityCard;
     private ElderProfile elderProfile;
+    private List<RecommendedBuddy> recommendedBuddies;
 
     private String userType = "elder";
 
@@ -114,6 +116,14 @@ public class Elder {
         this.elderProfile = elderProfile;
     }
 
+    public List<RecommendedBuddy> getRecommendedBuddies() {
+        return recommendedBuddies;
+    }
+
+    public void setRecommendedBuddies(List<RecommendedBuddy> recommendedBuddies) {
+        this.recommendedBuddies = recommendedBuddies;
+    }
+
     @Override
     public String toString() {
         return "Elder{" +
@@ -128,6 +138,7 @@ public class Elder {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", identityCard=" + identityCard +
                 ", elderProfile=" + elderProfile +
+                ", elderProfile=" + recommendedBuddies +
                 '}';
     }
 }

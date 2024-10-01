@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 
-import org.buddy.backend.models.Buddy;
-import org.buddy.backend.models.BuddyProfile;
+import org.buddy.backend.models.BuddyWithinRange;
 import org.buddy.backend.models.Elder;
 import org.buddy.backend.models.ElderProfile;
 import org.buddy.backend.models.PersonalData;
+import org.buddy.backend.models.RecommendedBuddy;
 import org.buddy.backend.services.ElderService;
 
 import java.util.List;
@@ -84,5 +84,32 @@ public class ElderController {
     public ResponseEntity<Void> deleteElder(@PathVariable String id) {
         elderService.deleteElder(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}/buddies")
+    public ResponseEntity<List<BuddyWithinRange>> getBuddiesWithinRange(@PathVariable String id) {
+        List<BuddyWithinRange> buddiesWithinRange = elderService.getBuddiesWithinRange(id);
+        if (buddiesWithinRange != null) {
+            return ResponseEntity.ok(buddiesWithinRange);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/{id}/buddies/recommended")
+    public ResponseEntity<List<RecommendedBuddy>> getRecommendedBuddies(@PathVariable String id) {
+        List<RecommendedBuddy> recommendedBuddies = elderService.getRecommendedBuddies(id);
+        if (recommendedBuddies != null) {
+            return ResponseEntity.ok(recommendedBuddies);
+        }
+        return ResponseEntity.notFound().build();
+    }
+    
+    @PatchMapping("/{id}/buddies/recommended")
+    public ResponseEntity<Elder> updateRecommendedBuddies(@PathVariable String id, @RequestBody List<RecommendedBuddy> recommendedBuddies) {
+        Elder updatedElder = elderService.updateRecommendedBuddies(id, recommendedBuddies);
+        if (updatedElder != null) {
+            return ResponseEntity.ok(updatedElder);
+        }
+        return ResponseEntity.notFound().build();
     }
 }

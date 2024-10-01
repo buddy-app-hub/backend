@@ -17,7 +17,6 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import org.buddy.backend.models.Buddy;
 import org.buddy.backend.models.BuddyProfile;
-import org.buddy.backend.models.Elder;
 import org.buddy.backend.models.PersonalData;
 import org.buddy.backend.services.BuddyService;
 

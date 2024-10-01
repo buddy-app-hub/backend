@@ -11,8 +11,8 @@ public class BuddyProfile {
     private List<Interest> interests;
     private List<TimeOfDay> availability;
     private List<String> photos = new ArrayList<>(); // Array ordenado con los nombres de las fotos cargadas en Firebase Storage
-
-    // Getters and setters
+    private Float globalRating; // Average rating of each of the meetings in which he participated (1 to 5)
+    private ConnectionPreferences connectionPreferences;
 
     public boolean getIsOnPause() {
         return isOnPause;
@@ -73,6 +73,22 @@ public class BuddyProfile {
         this.photos = photos;
     }
 
+    public Float getGlobalRating() {
+        return globalRating;
+    }
+
+    public void setGlobalRating(Float globalRating) {
+        this.globalRating = globalRating;
+    }
+
+    public ConnectionPreferences getConnectionPreferences() {
+        return connectionPreferences;
+    }
+
+    public void setConnectionPreferences(ConnectionPreferences connectionPreferences) {
+        this.connectionPreferences = connectionPreferences;
+    }
+
     @Override
     public String toString() {
         return "BuddyProfile{" +
@@ -83,6 +99,8 @@ public class BuddyProfile {
                 ", interests=" + interests +
                 ", availability=" + availability +
                 ", photos=" + photos +
+                ", globalRating=" + globalRating +
+                ", preferences=" + connectionPreferences +
                 '}';
     }
 }
