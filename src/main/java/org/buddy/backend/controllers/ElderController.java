@@ -86,15 +86,7 @@ public class ElderController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{id}/buddies")
-    public ResponseEntity<List<BuddyWithinRange>> getBuddiesWithinRange(@PathVariable String id) {
-        List<BuddyWithinRange> buddiesWithinRange = elderService.getBuddiesWithinRange(id);
-        if (buddiesWithinRange != null) {
-            return ResponseEntity.ok(buddiesWithinRange);
-        }
-        return ResponseEntity.notFound().build();
-    }
-
+    // Endpoint usando desde mobile para obtener los buddies recomendados previamente procesados por la buddy-recommender-lambda
     @GetMapping("/{id}/buddies/recommended")
     public ResponseEntity<List<RecommendedBuddy>> getRecommendedBuddies(@PathVariable String id) {
         List<RecommendedBuddy> recommendedBuddies = elderService.getRecommendedBuddies(id);
@@ -103,7 +95,18 @@ public class ElderController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    // Endpoint usado desde la buddy-recommender-lambda para obtener buddies en el rango del Elder para rankearlos y luego guardarlos usando updateRecommendedBuddies
+    @GetMapping("/{id}/buddies")
+    public ResponseEntity<List<BuddyWithinRange>> getBuddiesWithinRange(@PathVariable String id) {
+        List<BuddyWithinRange> buddiesWithinRange = elderService.getBuddiesWithinRange(id);
+        if (buddiesWithinRange != null) {
+            return ResponseEntity.ok(buddiesWithinRange);
+        }
+        return ResponseEntity.notFound().build();
+    }
     
+    // Endpoint usado desde la buddy-recommender-lambda para guardar a los buddies recomendados con los score resultantes del algoritmo de rankeo usado
     @PatchMapping("/{id}/buddies/recommended")
     public ResponseEntity<Elder> updateRecommendedBuddies(@PathVariable String id, @RequestBody List<RecommendedBuddy> recommendedBuddies) {
         Elder updatedElder = elderService.updateRecommendedBuddies(id, recommendedBuddies);
