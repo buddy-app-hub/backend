@@ -37,6 +37,14 @@ public class FirebaseFilter extends OncePerRequestFilter {
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
         String header = request.getHeader("Authorization");
+        
+        // Nos fijamos si el header es la api key creada para usarse desde las lambdas
+        if (header != null && header.equals(System.getenv("BACKEND_API_KEY_FOR_LAMBDA"))) {
+            filterChain.doFilter(request, response); // Token correcto desde Lambda
+            return;
+        }
+
+        // Sin, si no tiene la forma de un token Bearer, no autorizar
         if (header == null || !header.startsWith("Bearer ")) {
             sendUnauthorizedResponse(response, "Missing or invalid Authorization header");
             return;

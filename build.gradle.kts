@@ -29,11 +29,13 @@ tasks.register("bootRunDev") {
         val env = System.getenv()
         val databaseUri = env.getOrDefault("DATABASE_URI", "no-database-specified")
         val port = env.getOrDefault("PORT", "8080")
+        val geocodeApiKey = env.getOrDefault("GEOCODE_MAPS_API_KEY", "no-api-key-specified")
 
         tasks.withType<org.springframework.boot.gradle.tasks.run.BootRun>().configureEach {
             systemProperty("spring.profiles.active", "dev")
             environment("DATABASE_URI", databaseUri)
             environment("PORT", port)
+            environment("GEOCODE_MAPS_API_KEY", geocodeApiKey)
         }
     }
 

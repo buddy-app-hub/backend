@@ -2,7 +2,11 @@ package org.buddy.backend.models;
 
 import java.util.Date;
 
+import org.springframework.data.annotation.Id;
+
 public class Meeting {
+    @Id
+    private String meetingID;
     private TimeOfDay date;
     private MeetingLocation location;
     private boolean isCancelled = false;
@@ -11,8 +15,13 @@ public class Meeting {
     private boolean isRescheduled = false;
     private String activity;
     private Date dateLastModification;
+    private Float elderRatingForBuddy; // Rating that Elder made to Buddy
+    private Float buddyRatingForElder; // Rating that Buddy made to Elder
 
     // Getters and setters
+    public String getMeetingID() {
+        return meetingID;
+    }
 
     public TimeOfDay getDate() {
         return date;
@@ -78,6 +87,22 @@ public class Meeting {
         this.dateLastModification = dateLastModification;
     }
 
+    public Float getElderRatingForBuddy() {
+        return elderRatingForBuddy;
+    }
+
+    public void setElderRatingForBuddy(Float elderRatingForBuddy) {
+        this.elderRatingForBuddy = elderRatingForBuddy;
+    }
+
+    public Float getBuddyRatingForElder() {
+        return buddyRatingForElder;
+    }
+
+    public void setBuddyRatingForElder(Float buddyRatingForElder) {
+        this.buddyRatingForElder = buddyRatingForElder;
+    }
+
     @Override
     public String toString() {
         return "Meeting{" +
@@ -89,6 +114,8 @@ public class Meeting {
                 ", isRescheduled=" + isRescheduled +
                 ", activity='" + activity + '\'' +
                 ", dateLastModification='" + dateLastModification + '\'' +
+                ", elderRatingForBuddy='" + elderRatingForBuddy + '\'' +
+                ", buddyRatingForElder='" + buddyRatingForElder + '\'' +
                 '}';
     }
 }

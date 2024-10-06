@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,12 +16,15 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.buddy.backend.models.Buddy;
+import org.buddy.backend.models.BuddyProfile;
+import org.buddy.backend.models.PersonalData;
 import org.buddy.backend.services.BuddyService;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("buddies")
+// 
 @SecurityRequirement(name = "bearer-key")
 // Para usarlo a nivel metodo: @Operation(security = { @SecurityRequirement(name = "bearer-key") })
 public class BuddyController {
@@ -47,10 +51,28 @@ public class BuddyController {
 
         return buddyService.createBuddy(buddy);
     }
-
+    
     @PutMapping("/{id}")
     public ResponseEntity<Buddy> updateBuddy(@PathVariable String id, @RequestBody Buddy buddy) {
         Buddy updatedBuddy = buddyService.updateBuddy(id, buddy);
+        if (updatedBuddy != null) {
+            return ResponseEntity.ok(updatedBuddy);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PatchMapping("/{id}/profile")
+    public ResponseEntity<Buddy> updateBuddyProfile(@PathVariable String id, @RequestBody BuddyProfile updatedProfile) {
+        Buddy updatedBuddy = buddyService.updateBuddyProfile(id, updatedProfile);
+        if (updatedBuddy != null) {
+            return ResponseEntity.ok(updatedBuddy);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PatchMapping("/{id}/personaldata")
+    public ResponseEntity<Buddy> updateBuddyPersonalData(@PathVariable String id, @RequestBody PersonalData updatedPersonalData) {
+        Buddy updatedBuddy = buddyService.updateBuddyPersonalData(id, updatedPersonalData);
         if (updatedBuddy != null) {
             return ResponseEntity.ok(updatedBuddy);
         }
