@@ -1,5 +1,6 @@
 package org.buddy.backend.services;
 
+import org.buddy.backend.aws.SqsService;
 import org.buddy.backend.exceptions.ResourceNotFoundException;
 import org.buddy.backend.helpers.AddressHelper;
 import org.buddy.backend.models.Address;
@@ -24,6 +25,8 @@ public class ElderService {
     private BuddyRepository buddyRepository;
     @Autowired
     private AddressHelper addressHelper;
+    @Autowired
+    private SqsService sqsService;
 
     public List<Elder> getAllElders() {
         return elderRepository.findAll();
@@ -66,6 +69,8 @@ public class ElderService {
 
         elder.setElderProfile(updatedProfile);
 
+        sqsService.updateRecommendedBuddies(firebaseUID); // Mandamos a actualizar los recommended buddies
+
         return elderRepository.save(elder);
     }
 
@@ -76,16 +81,20 @@ public class ElderService {
         }
 
         // Si antes no tenia direccion y esta agregando la primera, o si cambio la
-        // direccion, actualizamos las coordenadas
+        // direccion, actualizamos las coordenadas y los recommended buddies
         if (elder.getPersonalData() == null || elder.getPersonalData().getAddress() == null
                 || !elder.getPersonalData().getAddress().equals(updatedPersonalData.getAddress())) {
             if (updatedPersonalData.getAddress() != null) {
                 Address address = addressHelper.processCoordinatesFromAddress(updatedPersonalData.getAddress());
                 updatedPersonalData.setAddress(address);
+
+                sqsService.updateRecommendedBuddies(firebaseUID); // Tambien actualizamos los recommended buddies porque cambio la ubicacion
             }
         }
 
         elder.setPersonalData(updatedPersonalData);
+
+        
 
         return elderRepository.save(elder);
     }
