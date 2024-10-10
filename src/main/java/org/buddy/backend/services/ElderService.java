@@ -67,6 +67,8 @@ public class ElderService {
             throw new ResourceNotFoundException("Elder not found with firebaseUID: " + firebaseUID);
         }
 
+        System.out.println("Updating elder profile for " + firebaseUID);
+
         elder.setElderProfile(updatedProfile);
 
         sqsService.updateRecommendedBuddies(firebaseUID); // Mandamos a actualizar los recommended buddies
@@ -75,6 +77,8 @@ public class ElderService {
     }
 
     public Elder updateElderPersonalData(String firebaseUID, PersonalData updatedPersonalData) {
+        System.out.println("Updating elder personal data for " + firebaseUID);
+
         Elder elder = elderRepository.findElderByFirebaseUID(firebaseUID);
         if (elder == null) {
             throw new ResourceNotFoundException("Elder not found with firebaseUID: " + firebaseUID);
@@ -85,6 +89,8 @@ public class ElderService {
         if (elder.getPersonalData() == null || elder.getPersonalData().getAddress() == null
                 || !elder.getPersonalData().getAddress().equals(updatedPersonalData.getAddress())) {
             if (updatedPersonalData.getAddress() != null) {
+                System.out.println("Updating address and getting coordinates for new address");
+
                 Address address = addressHelper.processCoordinatesFromAddress(updatedPersonalData.getAddress());
                 updatedPersonalData.setAddress(address);
 
