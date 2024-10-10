@@ -20,6 +20,8 @@ public class SqsService {
     }
 
     public void updateRecommendedBuddies(String firebaseUID) {
+        System.out.println("Updating recommended buddies for " + firebaseUID);
+
         String queueName = System.getenv("SQS_NAME_BUDDY_RECOMMENDATIONS");
         try {
             String queueURL = this.getQueueUrl(queueName);
@@ -34,14 +36,23 @@ public class SqsService {
     }
 
     private void sendMessageToQueue(String queueUrl, String messageBody) {
-        SendMessageRequest sendMessageRequest = SendMessageRequest.builder()
-                .queueUrl(queueUrl)
-                .messageBody(messageBody)
-                .build();
+        try {
+            SendMessageRequest sendMessageRequest = SendMessageRequest.builder()
+                    .queueUrl(queueUrl)
+                    .messageBody(messageBody)
+                    .build();
 
-        SendMessageResponse sendMessageResponse = sqsClient.sendMessage(sendMessageRequest);
+            SendMessageResponse sendMessageResponse = sqsClient.sendMessage(sendMessageRequest);
 
-        System.out.println("Mensaje enviado. ID del mensaje: " + sendMessageResponse.messageId());
+            System.out.println("Mensaje enviado. ID del mensaje: " + sendMessageResponse.messageId());
+
+        } catch (SqsException e) {
+            System.err.println("Error al conectar con SQS: " + e.awsErrorDetails().errorMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("Error general: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private String getQueueUrl(String queueName) {
