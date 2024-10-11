@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ElderProfile {
-    private String description;
-    private List<Interest> interests;
-    private List<TimeOfDay> availability;
+    private String description = "";
+    private List<Interest> interests = new ArrayList<>();
+    private List<TimeOfDay> availability = new ArrayList<>();
     private List<String> photos = new ArrayList<>(); // Array ordenado con los nombres de las fotos cargadas en Firebase Storage
-    private Float globalRating; // Average rating of each of the meetings in which he participated (1 to 5)
-    private ConnectionPreferences connectionPreferences;
+    private Double globalRating = 4.0; // Average rating of each of the meetings in which he participated (1 to 5)
+    private ConnectionPreferences connectionPreferences = new ConnectionPreferences();
 
     // Getters and setters
     public String getDescription() {
@@ -47,11 +47,11 @@ public class ElderProfile {
         this.photos = photos;
     }
 
-    public Float getGlobalRating() {
+    public Double getGlobalRating() {
         return globalRating;
     }
 
-    public void setGlobalRating(Float globalRating) {
+    public void setGlobalRating(Double globalRating) {
         this.globalRating = globalRating;
     }
 

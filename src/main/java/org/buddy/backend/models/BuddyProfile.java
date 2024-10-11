@@ -1,18 +1,19 @@
 package org.buddy.backend.models;
 
+import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BuddyProfile {
     private boolean isOnPause = false;
-    private String description;
-    private StudentDetails studentDetails;
-    private WorkerDetails workerDetails;
-    private List<Interest> interests;
-    private List<TimeOfDay> availability;
+    private String description = "";
+    private StudentDetails studentDetails = new StudentDetails();
+    private WorkerDetails workerDetails = new WorkerDetails();
+    private List<Interest> interests = new ArrayList<>();;
+    private List<TimeOfDay> availability = new ArrayList<>();
     private List<String> photos = new ArrayList<>(); // Array ordenado con los nombres de las fotos cargadas en Firebase Storage
-    private Float globalRating; // Average rating of each of the meetings in which he participated (1 to 5)
-    private ConnectionPreferences connectionPreferences;
+    private Double globalRating = 4.0; // Average rating of each of the meetings in which he participated (1 to 5)
+    private ConnectionPreferences connectionPreferences = new ConnectionPreferences();
 
     public boolean getIsOnPause() {
         return isOnPause;
@@ -73,11 +74,11 @@ public class BuddyProfile {
         this.photos = photos;
     }
 
-    public Float getGlobalRating() {
+    public Double getGlobalRating() {
         return globalRating;
     }
 
-    public void setGlobalRating(Float globalRating) {
+    public void setGlobalRating(Double globalRating) {
         this.globalRating = globalRating;
     }
 

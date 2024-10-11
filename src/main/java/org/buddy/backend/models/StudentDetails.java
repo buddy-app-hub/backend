@@ -1,8 +1,8 @@
 package org.buddy.backend.models;
 
 public class StudentDetails {
-    private String institution;
-    private String fieldOfStudy;
+    private String institution = "";
+    private String fieldOfStudy = "";
 
     // Getters and setters
 

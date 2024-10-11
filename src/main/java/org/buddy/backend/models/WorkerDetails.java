@@ -1,8 +1,8 @@
 package org.buddy.backend.models;
 
 public class WorkerDetails {
-    private String company;
-    private String position;
+    private String company = "";
+    private String position = "";
 
     // Getters and setters
 

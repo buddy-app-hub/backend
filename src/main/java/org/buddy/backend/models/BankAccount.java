@@ -1,8 +1,8 @@
 package org.buddy.backend.models;
 
 public class BankAccount {
-    private String bankAccountNumber;
-    private String bankName;
+    private String bankAccountNumber = "";
+    private String bankName = "";
 
     // Getters and setters
 

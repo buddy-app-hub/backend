@@ -136,7 +136,7 @@ public class ConnectionService {
     public void recalculateBuddyGlobalRating(String buddyID) {
         List<Connection> buddyConnections = this.getConnectionsByBuddyID(buddyID);
 
-        float totalRating = 0;
+        Double totalRating = 0.0;
         int count = 0;
 
         for (Connection conn : buddyConnections) {
@@ -148,7 +148,7 @@ public class ConnectionService {
             }
         }
 
-        Float averageRating = count > 0 ? totalRating / count : null; // null indica que no tiene calificaciones
+        Double averageRating = count > 0 ? totalRating / count : null; // null indica que no tiene calificaciones
 
         // Guardamos el rating promedio
         if (averageRating != null) {
@@ -163,7 +163,7 @@ public class ConnectionService {
     public void recalculateElderGlobalRating(String elderID) {
         List<Connection> elderConnections = this.getConnectionsByElderID(elderID);
 
-        float totalRating = 0;
+        Double totalRating = 0.0;
         int count = 0;
 
         for (Connection conn : elderConnections) {
@@ -175,7 +175,7 @@ public class ConnectionService {
             }
         }
 
-        Float averageRating = count > 0 ? totalRating / count : null; // null indica que no tiene calificaciones
+        Double averageRating = count > 0 ? totalRating / count : null; // null indica que no tiene calificaciones
 
         // Guardamos el rating promedio
         if (averageRating != null) {

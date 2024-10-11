@@ -50,7 +50,9 @@ public class ElderController {
     public Elder createElder(@RequestBody Elder elder, HttpServletRequest request) {
         System.out.println(elder);
 
-        return elderService.createElder(elder);
+        Elder elderStored = elderService.createElder(elder);
+        System.out.println("elder desde controller " + elderStored);
+        return elderStored;
     }
 
     @PutMapping("/{id}")

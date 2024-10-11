@@ -3,6 +3,7 @@ package org.buddy.backend.models;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,8 +13,8 @@ public class Connection {
     private String id;
     private String elderID;
     private String buddyID;
-    private Date creationDate;
-    private List<Meeting> meetings;
+    private Date creationDate = new Date();
+    private List<Meeting> meetings = new ArrayList<>();
 
     // Getters and setters
 

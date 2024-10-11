@@ -7,14 +7,14 @@ import org.springframework.data.annotation.Id;
 public class Meeting {
     @Id
     private String meetingID;
-    private TimeOfDay date;
-    private MeetingLocation location;
+    private TimeOfDay date = new TimeOfDay();
+    private MeetingLocation location = new MeetingLocation();
     private boolean isCancelled = false;
     private boolean isConfirmedByBuddy = false;
     private boolean isConfirmedByElder = false;
     private boolean isRescheduled = false;
-    private String activity;
-    private Date dateLastModification;
+    private String activity = "";
+    private Date dateLastModification = new Date();
     private Float elderRatingForBuddy; // Rating that Elder made to Buddy
     private Float buddyRatingForElder; // Rating that Buddy made to Elder
 

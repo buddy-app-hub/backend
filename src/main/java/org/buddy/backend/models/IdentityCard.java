@@ -1,8 +1,8 @@
 package org.buddy.backend.models;
 
 public class IdentityCard {
-    private String number;
-    private String country;
+    private String number = "";
+    private String country = "";
 
     // Getters and setters
     public String getNumber() {
