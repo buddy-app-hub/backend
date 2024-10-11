@@ -84,4 +84,31 @@ public class BuddyController {
         buddyService.deleteBuddy(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/{id}/send-approval")
+    public ResponseEntity<Void> sendForApproval(@PathVariable String id) {
+        Buddy updatedBuddy = buddyService.sendForApproval(id);
+
+        if (updatedBuddy == null) return ResponseEntity.notFound().build();
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{id}/approve")
+    public ResponseEntity<Void> approve(@PathVariable String id) {
+        return updateApprove(id, true);
+    }
+
+    @PostMapping("/{id}/reject")
+    public ResponseEntity<Void> reject(@PathVariable String id) {
+        return updateApprove(id, false);
+    }
+
+    private ResponseEntity<Void> updateApprove(String id, boolean approve) {
+        Buddy updatedBuddy = buddyService.updateApprove(id, approve);
+
+        if (updatedBuddy == null) return ResponseEntity.notFound().build();
+
+        return ResponseEntity.noContent().build();
+    }
 }
