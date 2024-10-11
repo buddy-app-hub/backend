@@ -4,7 +4,7 @@ public class LovedOne {
     private String firstName;
     private String lastName;
     private Integer age;
-    private PhoneNumber phoneNumber;
+    private PhoneNumber phoneNumber = new PhoneNumber();
     private String email;
     private String relationshipToElder;
 

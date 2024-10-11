@@ -3,6 +3,7 @@ package org.buddy.backend.models;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,15 +13,15 @@ public class Elder {
     private String firebaseUID;
     private boolean isBlocked = false;
     private String registrationMethod;
-    private Date registrationDate;
-    private boolean onLovedOneMode;
+    private Date registrationDate = new Date();
+    private boolean onLovedOneMode = false;
     private LovedOne lovedOne;
-    private PersonalData personalData;
+    private PersonalData personalData = new PersonalData();
     private String email;
-    private PhoneNumber phoneNumber;
-    private IdentityCard identityCard;
-    private ElderProfile elderProfile;
-    private List<RecommendedBuddy> recommendedBuddies;
+    private PhoneNumber phoneNumber = new PhoneNumber();
+    private IdentityCard identityCard = new IdentityCard();
+    private ElderProfile elderProfile = new ElderProfile();
+    private List<RecommendedBuddy> recommendedBuddies = new ArrayList<>();
 
     private String userType = "elder";
 
