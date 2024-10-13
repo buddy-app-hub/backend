@@ -6,6 +6,7 @@ import org.buddy.backend.helpers.AddressHelper;
 import org.buddy.backend.models.Address;
 import org.buddy.backend.models.Buddy;
 import org.buddy.backend.models.BuddyWithinRange;
+import org.buddy.backend.models.Connection;
 import org.buddy.backend.models.PersonalData;
 import org.buddy.backend.models.RecommendedBuddy;
 import org.buddy.backend.models.Elder;
@@ -16,6 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import org.buddy.backend.repositories.ConnectionRepository;
 
 @Service
 public class ElderService {
@@ -27,6 +31,8 @@ public class ElderService {
     private AddressHelper addressHelper;
     @Autowired
     private SqsService sqsService;
+    @Autowired
+    private ConnectionRepository connRepo;
 
     public List<Elder> getAllElders() {
         return elderRepository.findAll();
@@ -122,6 +128,14 @@ public class ElderService {
                 coords[0], coords[1],
                 rangeInMeters
             );
+
+            // Sacamos a los buddies con los que ya haya conectado el elder
+            List<String> connectedBuddyIDs = connRepo.findConnectionsByElderID(id)
+                .stream()
+                .map(Connection::getBuddyID)
+                .collect(Collectors.toList());
+
+            buddiesInRange.removeIf(b -> connectedBuddyIDs.contains(b.getBuddy().getFirebaseUID()));
 
             return buddiesInRange;
         }
