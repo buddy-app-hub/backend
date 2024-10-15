@@ -82,4 +82,28 @@ public class BuddyService {
 
         return buddyRepository.save(buddy);
     }
+
+    public Buddy sendForApproval (String id) {
+        Buddy buddy = buddyRepository.findById(id).orElse(null);
+
+        if (buddy == null) { return null; }
+
+        boolean isApproved = buddy.getIsApprovedBuddy();
+        boolean isUnderReview = buddy.getIsApplicationToBeBuddyUnderReview();
+
+        if (isApproved || isUnderReview) { return null; }
+
+        buddy.setIsApplicationToBeBuddyUnderReview(true);
+        return buddyRepository.save(buddy);
+    }
+
+    public Buddy updateApprove (String id, boolean approve) {
+        Buddy buddy = buddyRepository.findById(id).orElse(null);
+
+        if (buddy == null) { return null; }
+
+        buddy.setIsApplicationToBeBuddyUnderReview(false);
+        buddy.setIsApprovedBuddy(approve);
+        return buddyRepository.save(buddy);
+    }
 }
