@@ -7,7 +7,7 @@ import org.springframework.data.annotation.Id;
 public class Meeting {
     @Id
     private String meetingID;
-    private TimeOfDay date = new TimeOfDay();
+    private MeetingSchedule schedule = new MeetingSchedule();
     private MeetingLocation location = new MeetingLocation();
     private boolean isCancelled = false;
     private boolean isConfirmedByBuddy = false;
@@ -15,20 +15,19 @@ public class Meeting {
     private boolean isRescheduled = false;
     private String activity = "";
     private Date dateLastModification = new Date();
-    private Float elderRatingForBuddy; // Rating that Elder made to Buddy
-    private Float buddyRatingForElder; // Rating that Buddy made to Elder
+    private Review elderReviewForBuddy; // Review that Elder made to Buddy
+    private Review buddyReviewForElder; // Review that Buddy made to Elder
 
-    // Getters and setters
     public String getMeetingID() {
         return meetingID;
     }
 
-    public TimeOfDay getDate() {
-        return date;
+    public MeetingSchedule getSchedule() {
+        return schedule;
     }
 
-    public void setDate(TimeOfDay date) {
-        this.date = date;
+    public void setSchedule(MeetingSchedule schedule) {
+        this.schedule = schedule;
     }
 
     public MeetingLocation getLocation() {
@@ -87,26 +86,26 @@ public class Meeting {
         this.dateLastModification = dateLastModification;
     }
 
-    public Float getElderRatingForBuddy() {
-        return elderRatingForBuddy;
+    public Review getElderReviewForBuddy() {
+        return elderReviewForBuddy;
     }
 
-    public void setElderRatingForBuddy(Float elderRatingForBuddy) {
-        this.elderRatingForBuddy = elderRatingForBuddy;
+    public void setElderReviewForBuddy(Review elderReviewForBuddy) {
+        this.elderReviewForBuddy = elderReviewForBuddy;
     }
 
-    public Float getBuddyRatingForElder() {
-        return buddyRatingForElder;
+    public Review getBuddyReviewForElder() {
+        return buddyReviewForElder;
     }
 
-    public void setBuddyRatingForElder(Float buddyRatingForElder) {
-        this.buddyRatingForElder = buddyRatingForElder;
+    public void setBuddyReviewForElder(Review buddyReviewForElder) {
+        this.buddyReviewForElder = buddyReviewForElder;
     }
 
     @Override
     public String toString() {
         return "Meeting{" +
-                "date=" + date +
+                "schedule=" + schedule +
                 ", location=" + location +
                 ", isCancelled=" + isCancelled +
                 ", isConfirmedByBuddy=" + isConfirmedByBuddy +
@@ -114,8 +113,8 @@ public class Meeting {
                 ", isRescheduled=" + isRescheduled +
                 ", activity='" + activity + '\'' +
                 ", dateLastModification='" + dateLastModification + '\'' +
-                ", elderRatingForBuddy='" + elderRatingForBuddy + '\'' +
-                ", buddyRatingForElder='" + buddyRatingForElder + '\'' +
+                ", elderReviewForBuddy='" + elderReviewForBuddy + '\'' +
+                ", buddyReviewForElder='" + buddyReviewForElder + '\'' +
                 '}';
     }
 }

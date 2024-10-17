@@ -32,7 +32,7 @@ public class TimeOfDay {
 
     @Override
     public String toString() {
-        return "Availability{" +
+        return "TimeOfDay{" +
                 "dayOfWeek='" + dayOfWeek + '\'' +
                 ", from='" + from + '\'' +
                 ", to='" + to + '\'' +
