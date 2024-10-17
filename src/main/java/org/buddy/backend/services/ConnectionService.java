@@ -65,11 +65,11 @@ public class ConnectionService {
 
             // Si se calificó el encuentro, actualizamos los global ratings promediando los
             // ratings de todos los encuentros, incluyendo al recien calificado
-            if (newMeeting.getElderRatingForBuddy() != null) {
+            if (newMeeting.getElderReviewForBuddy() != null) {
                 System.out.println("Recalculating buddy global rating...");
                 recalculateBuddyGlobalRating(connection.getBuddyID());
             }
-            if (newMeeting.getBuddyRatingForElder() != null) {
+            if (newMeeting.getBuddyReviewForElder() != null) {
                 System.out.println("Recalculating elder global rating...");
                 recalculateElderGlobalRating(connection.getElderID());
             }
@@ -92,7 +92,7 @@ public class ConnectionService {
                     .findFirst();
             if (meetingOptional.isPresent()) {
                 Meeting mToSave = meetingOptional.get();
-                mToSave.setDate(updatedMeeting.getDate());
+                mToSave.setSchedule(updatedMeeting.getSchedule());
                 mToSave.setLocation(updatedMeeting.getLocation());
                 mToSave.setIsCancelled(updatedMeeting.getIsCancelled());
                 mToSave.setIsCancelled(updatedMeeting.getIsCancelled());
@@ -102,13 +102,13 @@ public class ConnectionService {
                 mToSave.setActivity(updatedMeeting.getActivity());
                 mToSave.setDateLastModification(Date.from(LocalDateTime.now().toInstant(null)));
 
-                if (mToSave.getElderRatingForBuddy() != updatedMeeting.getElderRatingForBuddy()) {
-                    mToSave.setElderRatingForBuddy(updatedMeeting.getElderRatingForBuddy());
+                if (mToSave.getElderReviewForBuddy() == null && updatedMeeting.getElderReviewForBuddy() != null) {
+                    mToSave.setElderReviewForBuddy(updatedMeeting.getElderReviewForBuddy());
                     recalculateBuddyRating = true;
                 }
 
-                if (mToSave.getBuddyRatingForElder() != updatedMeeting.getBuddyRatingForElder()) {
-                    mToSave.setBuddyRatingForElder(updatedMeeting.getBuddyRatingForElder());
+                if (mToSave.getBuddyReviewForElder() == null && updatedMeeting.getBuddyReviewForElder() != null) {
+                    mToSave.setBuddyReviewForElder(updatedMeeting.getBuddyReviewForElder());
                     recalculateElderRating = true;
                 }
 
@@ -141,8 +141,8 @@ public class ConnectionService {
 
         for (Connection conn : buddyConnections) {
             for (Meeting m : conn.getMeetings()) {
-                if (m.getElderRatingForBuddy() != null) {
-                    totalRating += m.getElderRatingForBuddy();
+                if (m.getElderReviewForBuddy() != null) {
+                    totalRating += m.getElderReviewForBuddy().getRating();
                     count++;
                 }
             }
@@ -168,8 +168,8 @@ public class ConnectionService {
 
         for (Connection conn : elderConnections) {
             for (Meeting m : conn.getMeetings()) {
-                if (m.getBuddyRatingForElder() != null) {
-                    totalRating += m.getBuddyRatingForElder();
+                if (m.getBuddyReviewForElder() != null) {
+                    totalRating += m.getBuddyReviewForElder().getRating();
                     count++;
                 }
             }
