@@ -17,6 +17,7 @@ public class Buddy {
     private boolean isIdentityValidated = false;
     private PersonalData personalData = new PersonalData();
     private String email;
+    private String walletId;
     private PhoneNumber phoneNumber = new PhoneNumber();
     private IdentityCard identityCard = new IdentityCard();
     private BankAccount bankAccount = new BankAccount();
@@ -98,6 +99,14 @@ public class Buddy {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getWalletId() {
+        return walletId;
+    }
+
+    public void setWalletId(String walletId) {
+        this.walletId = walletId;
     }
 
     public PhoneNumber getPhoneNumber() {

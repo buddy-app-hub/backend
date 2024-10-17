@@ -34,6 +34,7 @@ tasks.register("bootRunDev") {
         val awsAccessKeyID = env.getOrDefault("AWS_ACCESS_KEY_ID", "no-aws-access-key-id-specified")
         val awsSecretAccessKey = env.getOrDefault("AWS_SECRET_ACCESS_KEY", "no-aws-secret-access-key-specified")
         val sqsNameBuddyRecommendations = env.getOrDefault("SQS_NAME_BUDDY_RECOMMENDATIONS", "no-sqs-name")
+        val paymentsUrl = env.getOrDefault("PAYMENTS_URL", "no-payments-url")
 
         tasks.withType<org.springframework.boot.gradle.tasks.run.BootRun>().configureEach {
             systemProperty("spring.profiles.active", "dev")
@@ -44,6 +45,7 @@ tasks.register("bootRunDev") {
             environment("AWS_ACCESS_KEY_ID", awsAccessKeyID)
             environment("AWS_SECRET_ACCESS_KEY", awsSecretAccessKey)
             environment("SQS_NAME_BUDDY_RECOMMENDATIONS", sqsNameBuddyRecommendations)
+            environment("PAYMENTS_URL", paymentsUrl)
         }
     }
 
