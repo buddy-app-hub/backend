@@ -5,7 +5,6 @@ import java.util.Date;
 import org.springframework.data.annotation.Id;
 
 public class Meeting {
-    @Id
     private String meetingID;
     private MeetingSchedule schedule = new MeetingSchedule();
     private MeetingLocation location = new MeetingLocation();
@@ -13,6 +12,7 @@ public class Meeting {
     private boolean isConfirmedByBuddy = false;
     private boolean isConfirmedByElder = false;
     private boolean isRescheduled = false;
+    private boolean isPaymentPending = true;
     private String activity = "";
     private Date dateLastModification = new Date();
     private Review elderReviewForBuddy; // Review that Elder made to Buddy
@@ -20,6 +20,10 @@ public class Meeting {
 
     public String getMeetingID() {
         return meetingID;
+    }
+
+    public void setMeetingID(String id) {
+        this.meetingID = id;
     }
 
     public MeetingSchedule getSchedule() {
@@ -68,6 +72,14 @@ public class Meeting {
 
     public void setIsRescheduled(boolean isRescheduled) {
         this.isRescheduled = isRescheduled;
+    }
+
+    public boolean getIsPaymentPending() {
+        return isPaymentPending;
+    }
+
+    public void setIsPaymentPending(boolean isPaymentPending) {
+        this.isPaymentPending = isPaymentPending;
     }
 
     public String getActivity() {

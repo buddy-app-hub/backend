@@ -1,5 +1,6 @@
 package org.buddy.backend.services;
 
+import org.bson.types.ObjectId;
 import org.buddy.backend.models.BuddyProfile;
 import org.buddy.backend.models.Connection;
 import org.buddy.backend.models.ElderProfile;
@@ -12,6 +13,8 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ConnectionService {
@@ -58,6 +61,18 @@ public class ConnectionService {
         Optional<Connection> connectionOptional = connectionRepository.findById(connectionID);
         if (connectionOptional.isPresent()) {
             Connection connection = connectionOptional.get();
+            Set<String> meetingIds = connection.getMeetings()
+                    .stream()
+                    .map(Meeting::getMeetingID)
+                    .collect(Collectors.toSet());
+
+            String id;
+            do {
+                id = ObjectId.get().toString();
+            } while (meetingIds.contains(id));
+
+
+            newMeeting.setMeetingID(id);
             List<Meeting> connMeetings = connection.getMeetings();
             connMeetings.add(newMeeting);
             connection.setMeetings(connMeetings);
