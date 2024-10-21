@@ -1,5 +1,10 @@
 package org.buddy.backend.services;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.bson.types.ObjectId;
 import org.buddy.backend.models.BuddyProfile;
 import org.buddy.backend.models.Connection;
@@ -8,13 +13,6 @@ import org.buddy.backend.models.Meeting;
 import org.buddy.backend.repositories.ConnectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class ConnectionService {
@@ -70,7 +68,7 @@ public class ConnectionService {
             do {
                 id = ObjectId.get().toString();
             } while (meetingIds.contains(id));
-
+            
 
             newMeeting.setMeetingID(id);
             List<Meeting> connMeetings = connection.getMeetings();
@@ -110,12 +108,12 @@ public class ConnectionService {
                 mToSave.setSchedule(updatedMeeting.getSchedule());
                 mToSave.setLocation(updatedMeeting.getLocation());
                 mToSave.setIsCancelled(updatedMeeting.getIsCancelled());
-                mToSave.setIsCancelled(updatedMeeting.getIsCancelled());
                 mToSave.setIsConfirmedByBuddy(updatedMeeting.getIsConfirmedByBuddy());
                 mToSave.setIsConfirmedByElder(updatedMeeting.getIsConfirmedByElder());
                 mToSave.setIsRescheduled(updatedMeeting.getIsRescheduled());
                 mToSave.setActivity(updatedMeeting.getActivity());
-                mToSave.setDateLastModification(Date.from(LocalDateTime.now().toInstant(null)));
+                mToSave.setDateLastModification(updatedMeeting.getDateLastModification());
+                mToSave.setIsPaymentPending(updatedMeeting.getIsPaymentPending());
 
                 if (mToSave.getElderReviewForBuddy() == null && updatedMeeting.getElderReviewForBuddy() != null) {
                     mToSave.setElderReviewForBuddy(updatedMeeting.getElderReviewForBuddy());
