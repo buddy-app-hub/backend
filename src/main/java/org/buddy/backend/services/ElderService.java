@@ -1,5 +1,8 @@
 package org.buddy.backend.services;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.buddy.backend.aws.SqsService;
 import org.buddy.backend.exceptions.ResourceNotFoundException;
 import org.buddy.backend.helpers.AddressHelper;
@@ -7,19 +10,15 @@ import org.buddy.backend.models.Address;
 import org.buddy.backend.models.Buddy;
 import org.buddy.backend.models.BuddyWithinRange;
 import org.buddy.backend.models.Connection;
-import org.buddy.backend.models.PersonalData;
-import org.buddy.backend.models.RecommendedBuddy;
 import org.buddy.backend.models.Elder;
 import org.buddy.backend.models.ElderProfile;
+import org.buddy.backend.models.PersonalData;
+import org.buddy.backend.models.RecommendedBuddy;
 import org.buddy.backend.repositories.BuddyRepository;
+import org.buddy.backend.repositories.ConnectionRepository;
 import org.buddy.backend.repositories.ElderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.buddy.backend.repositories.ConnectionRepository;
 
 @Service
 public class ElderService {
@@ -157,7 +156,10 @@ public class ElderService {
     public List<RecommendedBuddy> getRecommendedBuddies(String id) {
         Elder elder = elderRepository.findById(id).orElse(null);
 
+        
         if (elder != null) {
+            List<RecommendedBuddy> buddiesToRecomend;
+            
             elder.getRecommendedBuddies().forEach(rb -> {
                 Buddy buddy = buddyRepository.findBuddyByFirebaseUID(rb.getBuddyID()); 
                 if (buddy != null) {
@@ -165,7 +167,17 @@ public class ElderService {
                 }
             });
 
-            return elder.getRecommendedBuddies();
+            // Sacamos a los buddies con los que ya haya conectado el elder
+            List<String> connectedBuddyIDs = connRepo.findConnectionsByElderID(id)
+            .stream()
+            .map(Connection::getBuddyID)
+            .collect(Collectors.toList());
+
+            buddiesToRecomend = elder.getRecommendedBuddies();
+
+            buddiesToRecomend.removeIf(b -> connectedBuddyIDs.contains(b.getBuddy().getFirebaseUID()));
+
+            return buddiesToRecomend;
         }
         return null;
     }
