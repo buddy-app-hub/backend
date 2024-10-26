@@ -2,8 +2,6 @@ package org.buddy.backend.models;
 
 import java.util.Date;
 
-import org.springframework.data.annotation.Id;
-
 public class Meeting {
     private String meetingID;
     private MeetingSchedule schedule = new MeetingSchedule();
@@ -15,6 +13,7 @@ public class Meeting {
     private boolean isPaymentPending = true;
     private String activity = "";
     private Date dateLastModification = new Date();
+    private boolean startConfirmed = false;
     private Review elderReviewForBuddy; // Review that Elder made to Buddy
     private Review buddyReviewForElder; // Review that Buddy made to Elder
 
@@ -98,6 +97,14 @@ public class Meeting {
         this.dateLastModification = dateLastModification;
     }
 
+    public boolean getStartConfirmed() {
+        return startConfirmed;
+    }
+
+    public void setStartConfirmed(boolean startConfirmed) {
+        this.startConfirmed = startConfirmed;
+    }
+
     public Review getElderReviewForBuddy() {
         return elderReviewForBuddy;
     }
@@ -125,8 +132,9 @@ public class Meeting {
                 ", isRescheduled=" + isRescheduled +
                 ", activity='" + activity + '\'' +
                 ", dateLastModification='" + dateLastModification + '\'' +
-                ", elderReviewForBuddy='" + elderReviewForBuddy + '\'' +
-                ", buddyReviewForElder='" + buddyReviewForElder + '\'' +
+                ", startConfirmed=" + startConfirmed +
+                ", elderReviewForBuddy=" + elderReviewForBuddy +
+                ", buddyReviewForElder=" + buddyReviewForElder +
                 '}';
     }
 }

@@ -114,6 +114,7 @@ public class ConnectionService {
                 mToSave.setActivity(updatedMeeting.getActivity());
                 mToSave.setDateLastModification(updatedMeeting.getDateLastModification());
                 mToSave.setIsPaymentPending(updatedMeeting.getIsPaymentPending());
+                mToSave.setStartConfirmed(updatedMeeting.getStartConfirmed());
 
                 if (mToSave.getElderReviewForBuddy() == null && updatedMeeting.getElderReviewForBuddy() != null) {
                     mToSave.setElderReviewForBuddy(updatedMeeting.getElderReviewForBuddy());
