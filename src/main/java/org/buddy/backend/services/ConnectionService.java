@@ -12,6 +12,7 @@ import org.buddy.backend.models.ElderProfile;
 import org.buddy.backend.models.Meeting;
 import org.buddy.backend.repositories.ConnectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,6 +23,8 @@ public class ConnectionService {
     private BuddyService buddyService;
     @Autowired
     private ElderService elderService;
+    @Autowired
+	private SimpMessagingTemplate template;
 
     public List<Connection> getAllConnections() {
         return connectionRepository.findAll();
@@ -114,6 +117,10 @@ public class ConnectionService {
                 mToSave.setActivity(updatedMeeting.getActivity());
                 mToSave.setDateLastModification(updatedMeeting.getDateLastModification());
                 mToSave.setIsPaymentPending(updatedMeeting.getIsPaymentPending());
+                if (mToSave.getStartConfirmed() == false && updatedMeeting.getStartConfirmed() == true) {
+                    notifyMeetingStarted(updatedMeeting.getMeetingID());
+                }
+                mToSave.setStartConfirmed(updatedMeeting.getStartConfirmed());
 
                 if (mToSave.getElderReviewForBuddy() == null && updatedMeeting.getElderReviewForBuddy() != null) {
                     mToSave.setElderReviewForBuddy(updatedMeeting.getElderReviewForBuddy());
@@ -196,5 +203,11 @@ public class ConnectionService {
             elderProfile.setGlobalRating(averageRating);
             elderService.updateElderProfile(elderID, elderProfile);
         }
+    }
+
+    // Mandamos la notificacion/mensaje al topico para que el cliente Flutter la reciba a traves del websocket
+    private void notifyMeetingStarted(String meetingId) {
+        System.out.println("Notifying topic about start of meeting");
+        template.convertAndSend("/topic/meetingStarted/" + meetingId, "started");
     }
 }
