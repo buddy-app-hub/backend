@@ -80,6 +80,11 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.10.2")
     implementation(platform("software.amazon.awssdk:bom:2.28.16")) // Importamos el BOM para que todos los modulos de SDK usen la misma version
     implementation("software.amazon.awssdk:sqs") // Agregamos dependencias específicas de AWS SDK sin especificar versiones
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-websocket")
+    implementation("org.springframework:spring-messaging")
+
 }
 
 tasks.withType<Test> {
