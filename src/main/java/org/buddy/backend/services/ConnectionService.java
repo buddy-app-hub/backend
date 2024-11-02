@@ -1,17 +1,19 @@
 package org.buddy.backend.services;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.bson.types.ObjectId;
 import org.buddy.backend.models.BuddyProfile;
 import org.buddy.backend.models.Connection;
 import org.buddy.backend.models.ElderProfile;
 import org.buddy.backend.models.Meeting;
 import org.buddy.backend.repositories.ConnectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ConnectionService {
@@ -21,6 +23,8 @@ public class ConnectionService {
     private BuddyService buddyService;
     @Autowired
     private ElderService elderService;
+    @Autowired
+	private SimpMessagingTemplate template;
 
     public List<Connection> getAllConnections() {
         return connectionRepository.findAll();
@@ -58,6 +62,18 @@ public class ConnectionService {
         Optional<Connection> connectionOptional = connectionRepository.findById(connectionID);
         if (connectionOptional.isPresent()) {
             Connection connection = connectionOptional.get();
+            Set<String> meetingIds = connection.getMeetings()
+                    .stream()
+                    .map(Meeting::getMeetingID)
+                    .collect(Collectors.toSet());
+
+            String id;
+            do {
+                id = ObjectId.get().toString();
+            } while (meetingIds.contains(id));
+            
+
+            newMeeting.setMeetingID(id);
             List<Meeting> connMeetings = connection.getMeetings();
             connMeetings.add(newMeeting);
             connection.setMeetings(connMeetings);
@@ -65,11 +81,11 @@ public class ConnectionService {
 
             // Si se calificó el encuentro, actualizamos los global ratings promediando los
             // ratings de todos los encuentros, incluyendo al recien calificado
-            if (newMeeting.getElderRatingForBuddy() != null) {
+            if (newMeeting.getElderReviewForBuddy() != null) {
                 System.out.println("Recalculating buddy global rating...");
                 recalculateBuddyGlobalRating(connection.getBuddyID());
             }
-            if (newMeeting.getBuddyRatingForElder() != null) {
+            if (newMeeting.getBuddyReviewForElder() != null) {
                 System.out.println("Recalculating elder global rating...");
                 recalculateElderGlobalRating(connection.getElderID());
             }
@@ -92,23 +108,27 @@ public class ConnectionService {
                     .findFirst();
             if (meetingOptional.isPresent()) {
                 Meeting mToSave = meetingOptional.get();
-                mToSave.setDate(updatedMeeting.getDate());
+                mToSave.setSchedule(updatedMeeting.getSchedule());
                 mToSave.setLocation(updatedMeeting.getLocation());
-                mToSave.setIsCancelled(updatedMeeting.getIsCancelled());
                 mToSave.setIsCancelled(updatedMeeting.getIsCancelled());
                 mToSave.setIsConfirmedByBuddy(updatedMeeting.getIsConfirmedByBuddy());
                 mToSave.setIsConfirmedByElder(updatedMeeting.getIsConfirmedByElder());
                 mToSave.setIsRescheduled(updatedMeeting.getIsRescheduled());
                 mToSave.setActivity(updatedMeeting.getActivity());
-                mToSave.setDateLastModification(Date.from(LocalDateTime.now().toInstant(null)));
+                mToSave.setDateLastModification(updatedMeeting.getDateLastModification());
+                mToSave.setIsPaymentPending(updatedMeeting.getIsPaymentPending());
+                if (mToSave.getStartConfirmed() == false && updatedMeeting.getStartConfirmed() == true) {
+                    notifyMeetingStarted(updatedMeeting.getMeetingID());
+                }
+                mToSave.setStartConfirmed(updatedMeeting.getStartConfirmed());
 
-                if (mToSave.getElderRatingForBuddy() != updatedMeeting.getElderRatingForBuddy()) {
-                    mToSave.setElderRatingForBuddy(updatedMeeting.getElderRatingForBuddy());
+                if (mToSave.getElderReviewForBuddy() == null && updatedMeeting.getElderReviewForBuddy() != null) {
+                    mToSave.setElderReviewForBuddy(updatedMeeting.getElderReviewForBuddy());
                     recalculateBuddyRating = true;
                 }
 
-                if (mToSave.getBuddyRatingForElder() != updatedMeeting.getBuddyRatingForElder()) {
-                    mToSave.setBuddyRatingForElder(updatedMeeting.getBuddyRatingForElder());
+                if (mToSave.getBuddyReviewForElder() == null && updatedMeeting.getBuddyReviewForElder() != null) {
+                    mToSave.setBuddyReviewForElder(updatedMeeting.getBuddyReviewForElder());
                     recalculateElderRating = true;
                 }
 
@@ -136,19 +156,19 @@ public class ConnectionService {
     public void recalculateBuddyGlobalRating(String buddyID) {
         List<Connection> buddyConnections = this.getConnectionsByBuddyID(buddyID);
 
-        float totalRating = 0;
+        Double totalRating = 0.0;
         int count = 0;
 
         for (Connection conn : buddyConnections) {
             for (Meeting m : conn.getMeetings()) {
-                if (m.getElderRatingForBuddy() != null) {
-                    totalRating += m.getElderRatingForBuddy();
+                if (m.getElderReviewForBuddy() != null) {
+                    totalRating += m.getElderReviewForBuddy().getRating();
                     count++;
                 }
             }
         }
 
-        Float averageRating = count > 0 ? totalRating / count : null; // null indica que no tiene calificaciones
+        Double averageRating = count > 0 ? totalRating / count : null; // null indica que no tiene calificaciones
 
         // Guardamos el rating promedio
         if (averageRating != null) {
@@ -163,19 +183,19 @@ public class ConnectionService {
     public void recalculateElderGlobalRating(String elderID) {
         List<Connection> elderConnections = this.getConnectionsByElderID(elderID);
 
-        float totalRating = 0;
+        Double totalRating = 0.0;
         int count = 0;
 
         for (Connection conn : elderConnections) {
             for (Meeting m : conn.getMeetings()) {
-                if (m.getBuddyRatingForElder() != null) {
-                    totalRating += m.getBuddyRatingForElder();
+                if (m.getBuddyReviewForElder() != null) {
+                    totalRating += m.getBuddyReviewForElder().getRating();
                     count++;
                 }
             }
         }
 
-        Float averageRating = count > 0 ? totalRating / count : null; // null indica que no tiene calificaciones
+        Double averageRating = count > 0 ? totalRating / count : null; // null indica que no tiene calificaciones
 
         // Guardamos el rating promedio
         if (averageRating != null) {
@@ -183,5 +203,11 @@ public class ConnectionService {
             elderProfile.setGlobalRating(averageRating);
             elderService.updateElderProfile(elderID, elderProfile);
         }
+    }
+
+    // Mandamos la notificacion/mensaje al topico para que el cliente Flutter la reciba a traves del websocket
+    private void notifyMeetingStarted(String meetingId) {
+        System.out.println("Notifying topic about start of meeting");
+        template.convertAndSend("/topic/meetingStarted/" + meetingId, "started");
     }
 }

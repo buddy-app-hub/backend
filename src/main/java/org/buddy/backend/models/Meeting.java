@@ -2,33 +2,35 @@ package org.buddy.backend.models;
 
 import java.util.Date;
 
-import org.springframework.data.annotation.Id;
-
 public class Meeting {
-    @Id
     private String meetingID;
-    private TimeOfDay date;
-    private MeetingLocation location;
+    private MeetingSchedule schedule = new MeetingSchedule();
+    private MeetingLocation location = new MeetingLocation();
     private boolean isCancelled = false;
     private boolean isConfirmedByBuddy = false;
     private boolean isConfirmedByElder = false;
     private boolean isRescheduled = false;
-    private String activity;
-    private Date dateLastModification;
-    private Float elderRatingForBuddy; // Rating that Elder made to Buddy
-    private Float buddyRatingForElder; // Rating that Buddy made to Elder
+    private boolean isPaymentPending = true;
+    private String activity = "";
+    private Date dateLastModification = new Date();
+    private boolean startConfirmed = false;
+    private Review elderReviewForBuddy; // Review that Elder made to Buddy
+    private Review buddyReviewForElder; // Review that Buddy made to Elder
 
-    // Getters and setters
     public String getMeetingID() {
         return meetingID;
     }
 
-    public TimeOfDay getDate() {
-        return date;
+    public void setMeetingID(String id) {
+        this.meetingID = id;
     }
 
-    public void setDate(TimeOfDay date) {
-        this.date = date;
+    public MeetingSchedule getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(MeetingSchedule schedule) {
+        this.schedule = schedule;
     }
 
     public MeetingLocation getLocation() {
@@ -71,6 +73,14 @@ public class Meeting {
         this.isRescheduled = isRescheduled;
     }
 
+    public boolean getIsPaymentPending() {
+        return isPaymentPending;
+    }
+
+    public void setIsPaymentPending(boolean isPaymentPending) {
+        this.isPaymentPending = isPaymentPending;
+    }
+
     public String getActivity() {
         return activity;
     }
@@ -87,26 +97,34 @@ public class Meeting {
         this.dateLastModification = dateLastModification;
     }
 
-    public Float getElderRatingForBuddy() {
-        return elderRatingForBuddy;
+    public boolean getStartConfirmed() {
+        return startConfirmed;
     }
 
-    public void setElderRatingForBuddy(Float elderRatingForBuddy) {
-        this.elderRatingForBuddy = elderRatingForBuddy;
+    public void setStartConfirmed(boolean startConfirmed) {
+        this.startConfirmed = startConfirmed;
     }
 
-    public Float getBuddyRatingForElder() {
-        return buddyRatingForElder;
+    public Review getElderReviewForBuddy() {
+        return elderReviewForBuddy;
     }
 
-    public void setBuddyRatingForElder(Float buddyRatingForElder) {
-        this.buddyRatingForElder = buddyRatingForElder;
+    public void setElderReviewForBuddy(Review elderReviewForBuddy) {
+        this.elderReviewForBuddy = elderReviewForBuddy;
+    }
+
+    public Review getBuddyReviewForElder() {
+        return buddyReviewForElder;
+    }
+
+    public void setBuddyReviewForElder(Review buddyReviewForElder) {
+        this.buddyReviewForElder = buddyReviewForElder;
     }
 
     @Override
     public String toString() {
         return "Meeting{" +
-                "date=" + date +
+                "schedule=" + schedule +
                 ", location=" + location +
                 ", isCancelled=" + isCancelled +
                 ", isConfirmedByBuddy=" + isConfirmedByBuddy +
@@ -114,8 +132,9 @@ public class Meeting {
                 ", isRescheduled=" + isRescheduled +
                 ", activity='" + activity + '\'' +
                 ", dateLastModification='" + dateLastModification + '\'' +
-                ", elderRatingForBuddy='" + elderRatingForBuddy + '\'' +
-                ", buddyRatingForElder='" + buddyRatingForElder + '\'' +
+                ", startConfirmed=" + startConfirmed +
+                ", elderReviewForBuddy=" + elderReviewForBuddy +
+                ", buddyReviewForElder=" + buddyReviewForElder +
                 '}';
     }
 }

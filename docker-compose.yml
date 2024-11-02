@@ -17,6 +17,10 @@ services:
       - DATABASE_URI=mongodb://${DB_USERNAME}:${DB_PASSWORD}@mongodb:${DB_PORT}/admin?retryWrites=true&w=majority
       - GEOCODE_MAPS_API_KEY=${GEOCODE_MAPS_API_KEY}
       - BACKEND_API_KEY_FOR_LAMBDA=${BACKEND_API_KEY_FOR_LAMBDA}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - SQS_NAME_BUDDY_RECOMMENDATIONS=${SQS_NAME_BUDDY_RECOMMENDATIONS}
+      - PAYMENTS_URL=${PAYMENTS_URL}
     volumes:
       - ./src/main/resources:/app/config
     networks:

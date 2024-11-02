@@ -1,7 +1,7 @@
 package org.buddy.backend.models;
 
 public class Interest {
-    private String name;
+    private String name = "";
 
     // Getters and setters
     public String getName() {

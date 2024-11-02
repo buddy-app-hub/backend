@@ -3,13 +3,13 @@ package org.buddy.backend.models;
 import java.util.Objects;
 
 public class Address {
-    private String streetName;
-    private Integer streetNumber;
-    private String apartmentNumber;
-    private String city;
-    private String state;
-    private String postalCode;
-    private String country;
+    private String streetName = "";
+    private Integer streetNumber = 0;
+    private String apartmentNumber = "";
+    private String city = "";
+    private String state = "";
+    private String postalCode = "";
+    private String country = "Argentina";
     private Coordinates coordinates;
 
     public String getStreetName() {

@@ -13,14 +13,15 @@ public class Buddy {
     private boolean isApprovedBuddy = false;
     private boolean isApplicationToBeBuddyUnderReview = false;
     private String registrationMethod;
-    private Date registrationDate;
+    private Date registrationDate = new Date();
     private boolean isIdentityValidated = false;
-    private PersonalData personalData;
+    private PersonalData personalData = new PersonalData();
     private String email;
-    private PhoneNumber phoneNumber;
-    private IdentityCard identityCard;
-    private BankAccount bankAccount;
-    private BuddyProfile buddyProfile;
+    private String walletId;
+    private PhoneNumber phoneNumber = new PhoneNumber();
+    private IdentityCard identityCard = new IdentityCard();
+    private BankAccount bankAccount = new BankAccount();
+    private BuddyProfile buddyProfile = new BuddyProfile();
 
     private String userType = "buddy";
 
@@ -98,6 +99,14 @@ public class Buddy {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getWalletId() {
+        return walletId;
+    }
+
+    public void setWalletId(String walletId) {
+        this.walletId = walletId;
     }
 
     public PhoneNumber getPhoneNumber() {

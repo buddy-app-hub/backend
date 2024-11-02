@@ -2,14 +2,11 @@ package org.buddy.backend.services;
 
 import org.buddy.backend.exceptions.ResourceNotFoundException;
 import org.buddy.backend.helpers.AddressHelper;
-import org.buddy.backend.models.Address;
-import org.buddy.backend.models.Buddy;
-import org.buddy.backend.models.BuddyProfile;
+import org.buddy.backend.models.*;
 import org.buddy.backend.repositories.BuddyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import org.buddy.backend.models.PersonalData;
 
 @Service
 public class BuddyService {
@@ -17,6 +14,8 @@ public class BuddyService {
     private BuddyRepository buddyRepository;
     @Autowired
     private AddressHelper addressHelper;
+    @Autowired
+    private WalletService walletService;
 
     public List<Buddy> getAllBuddies() {
         return buddyRepository.findAll();
@@ -30,6 +29,16 @@ public class BuddyService {
         if (buddy.getPersonalData() != null && buddy.getPersonalData().getAddress() != null) {
             Address address = addressHelper.processCoordinatesFromAddress(buddy.getPersonalData().getAddress());
             buddy.getPersonalData().setAddress(address);
+        }
+
+        try {
+            Wallet wallet = walletService.createWallet();
+
+            if (wallet != null) {
+                buddy.setWalletId(wallet.getId());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return buddyRepository.save(buddy);
@@ -80,6 +89,30 @@ public class BuddyService {
 
         buddy.setPersonalData(updatedPersonalData);
 
+        return buddyRepository.save(buddy);
+    }
+
+    public Buddy sendForApproval (String id) {
+        Buddy buddy = buddyRepository.findById(id).orElse(null);
+
+        if (buddy == null) { return null; }
+
+        boolean isApproved = buddy.getIsApprovedBuddy();
+        boolean isUnderReview = buddy.getIsApplicationToBeBuddyUnderReview();
+
+        if (isApproved || isUnderReview) { return null; }
+
+        buddy.setIsApplicationToBeBuddyUnderReview(true);
+        return buddyRepository.save(buddy);
+    }
+
+    public Buddy updateApprove (String id, boolean approve) {
+        Buddy buddy = buddyRepository.findById(id).orElse(null);
+
+        if (buddy == null) { return null; }
+
+        buddy.setIsApplicationToBeBuddyUnderReview(false);
+        buddy.setIsApprovedBuddy(approve);
         return buddyRepository.save(buddy);
     }
 }
