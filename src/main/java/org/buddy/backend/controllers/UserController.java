@@ -25,7 +25,7 @@ public class UserController {
     @Autowired
     private ElderService elderService;
 
-    @GetMapping("/me")
+    @GetMapping(value = "/me", produces = "application/json;charset=UTF-8")
     @Operation(security = { @SecurityRequirement(name = "bearer-key") })
     public ResponseEntity<?> getCurrentUser() {
         String firebaseUID = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

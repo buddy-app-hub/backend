@@ -37,7 +37,7 @@ public class ElderController {
         return elderService.getAllElders();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Elder> getElderById(@PathVariable String id) {
         Elder elder = elderService.getElderById(id);
         if (elder != null) {
@@ -46,7 +46,7 @@ public class ElderController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping
+    @PostMapping(produces = "application/json;charset=UTF-8")
     public Elder createElder(@RequestBody Elder elder, HttpServletRequest request) {
         System.out.println(elder);
 
@@ -55,7 +55,7 @@ public class ElderController {
         return elderStored;
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Elder> updateElder(@PathVariable String id, @RequestBody Elder elder) {
         Elder updatedElder = elderService.updateElder(id, elder);
         if (updatedElder != null) {
@@ -64,7 +64,7 @@ public class ElderController {
         return ResponseEntity.notFound().build();
     }
 
-    @PatchMapping("/{id}/profile")
+    @PatchMapping(value = "/{id}/profile", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Elder> updateElderProfile(@PathVariable String id, @RequestBody ElderProfile updatedProfile) {
         Elder updatedElder = elderService.updateElderProfile(id, updatedProfile);
         if (updatedElder != null) {
@@ -73,7 +73,7 @@ public class ElderController {
         return ResponseEntity.notFound().build();
     }
 
-    @PatchMapping("/{id}/personaldata")
+    @PatchMapping(value = "/{id}/personaldata", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Elder> updateElderPersonalData(@PathVariable String id, @RequestBody PersonalData updatedPersonalData) {
         Elder updatedElder = elderService.updateElderPersonalData(id, updatedPersonalData);
         if (updatedElder != null) {
@@ -82,14 +82,14 @@ public class ElderController {
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(value = "/{id}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Void> deleteElder(@PathVariable String id) {
         elderService.deleteElder(id);
         return ResponseEntity.noContent().build();
     }
 
     // Endpoint usando desde mobile para obtener los buddies recomendados previamente procesados por la buddy-recommender-lambda
-    @GetMapping("/{id}/buddies/recommended")
+    @GetMapping(value = "/{id}/buddies/recommended", produces = "application/json;charset=UTF-8")
     public ResponseEntity<List<RecommendedBuddy>> getRecommendedBuddies(@PathVariable String id) {
         List<RecommendedBuddy> recommendedBuddies = elderService.getRecommendedBuddies(id);
         if (recommendedBuddies != null) {
@@ -99,7 +99,7 @@ public class ElderController {
     }
 
     // Endpoint usado desde la buddy-recommender-lambda para obtener buddies en el rango del Elder para rankearlos y luego guardarlos usando updateRecommendedBuddies
-    @GetMapping("/{id}/buddies")
+    @GetMapping(value = "/{id}/buddies", produces = "application/json;charset=UTF-8")
     public ResponseEntity<List<BuddyWithinRange>> getBuddiesWithinRange(@PathVariable String id) {
         List<BuddyWithinRange> buddiesWithinRange = elderService.getBuddiesWithinRange(id);
         if (buddiesWithinRange != null) {
@@ -109,7 +109,7 @@ public class ElderController {
     }
     
     // Endpoint usado desde la buddy-recommender-lambda para guardar a los buddies recomendados con los score resultantes del algoritmo de rankeo usado
-    @PatchMapping("/{id}/buddies/recommended")
+    @PatchMapping(value = "/{id}/buddies/recommended", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Elder> updateRecommendedBuddies(@PathVariable String id, @RequestBody List<RecommendedBuddy> recommendedBuddies) {
         Elder updatedElder = elderService.updateRecommendedBuddies(id, recommendedBuddies);
         if (updatedElder != null) {

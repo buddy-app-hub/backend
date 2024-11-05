@@ -33,7 +33,7 @@ public class ConnectionController {
         return connectionService.getAllConnections();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Connection> getConnectionById(@PathVariable String id) {
         Connection connection = connectionService.getConnectionById(id);
         if (connection != null) {
@@ -42,12 +42,12 @@ public class ConnectionController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping
+    @PostMapping(produces = "application/json;charset=UTF-8")
     public Connection createConnection(@RequestBody Connection connection, HttpServletRequest request) {
         return connectionService.createConnection(connection);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Connection> updateConnection(@PathVariable String id, @RequestBody Connection connection) {
         Connection updatedConnection = connectionService.updateConnection(id, connection);
         if (updatedConnection != null) {
@@ -56,13 +56,13 @@ public class ConnectionController {
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(value = "/{id}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Void> deleteConnection(@PathVariable String id) {
         connectionService.deleteConnection(id);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/buddies/{buddyID}")
+    @GetMapping(value = "/buddies/{buddyID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<List<Connection>> getConnectionsByBuddyID(@PathVariable String buddyID) {
         List<Connection> connections = connectionService.getConnectionsByBuddyID(buddyID);
         if (connections != null) {
@@ -71,7 +71,7 @@ public class ConnectionController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/elders/{elderID}")
+    @GetMapping(value = "/elders/{elderID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<List<Connection>> getConnectionsByElderID(@PathVariable String elderID) {
         List<Connection> connections = connectionService.getConnectionsByElderID(elderID);
         if (connections != null) {
@@ -81,7 +81,7 @@ public class ConnectionController {
     }
 
     /* Si se califica la meeting además de crearse, esto se detecta y se re-calcula el rating global del usuario al que se calificó */
-    @PostMapping("/{connectionID}/meetings")
+    @PostMapping(value = "/{connectionID}/meetings", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Meeting> createMeeting(@PathVariable String connectionID, @RequestBody Meeting newMeeting) {
         Meeting createdMeeting = connectionService.createMeeting(connectionID, newMeeting);
         if (createdMeeting != null) {
@@ -92,7 +92,7 @@ public class ConnectionController {
     }
 
     /* Si se califica un meeting, esto se detecta y se re-calcula el rating global del usuario al que se calificó */
-    @PutMapping("/{connectionID}/meetings/{meetingID}")
+    @PutMapping(value = "/{connectionID}/meetings/{meetingID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Meeting> updateMeeting(@PathVariable String connectionID, @PathVariable String meetingID, @RequestBody Meeting meeting) {
         Meeting updatedMeeting = connectionService.updateMeeting(connectionID, meetingID, meeting);
         if (updatedMeeting != null) {
