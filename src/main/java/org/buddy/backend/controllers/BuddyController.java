@@ -1,6 +1,7 @@
 package org.buddy.backend.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,12 +32,14 @@ public class BuddyController {
     @Autowired
     private BuddyService buddyService;
 
-    @GetMapping
+    @SuppressWarnings("deprecation")
+    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Buddy> getAllBuddies() {
         return buddyService.getAllBuddies();
     }
 
-    @GetMapping("/{id}")
+    @SuppressWarnings("deprecation")
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Buddy> getBuddyById(@PathVariable String id) {
         Buddy buddy = buddyService.getBuddyById(id);
         if (buddy != null) {
@@ -45,14 +48,16 @@ public class BuddyController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping
+    @SuppressWarnings("deprecation")
+    @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Buddy createBuddy(@RequestBody Buddy buddy, HttpServletRequest request) {
         System.out.println(buddy);
 
         return buddyService.createBuddy(buddy);
     }
     
-    @PutMapping("/{id}")
+    @SuppressWarnings("deprecation")
+    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Buddy> updateBuddy(@PathVariable String id, @RequestBody Buddy buddy) {
         Buddy updatedBuddy = buddyService.updateBuddy(id, buddy);
         if (updatedBuddy != null) {
@@ -61,7 +66,8 @@ public class BuddyController {
         return ResponseEntity.notFound().build();
     }
 
-    @PatchMapping("/{id}/profile")
+    @SuppressWarnings("deprecation")
+    @PatchMapping(value = "/{id}/profile", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Buddy> updateBuddyProfile(@PathVariable String id, @RequestBody BuddyProfile updatedProfile) {
         Buddy updatedBuddy = buddyService.updateBuddyProfile(id, updatedProfile);
         if (updatedBuddy != null) {
@@ -70,7 +76,8 @@ public class BuddyController {
         return ResponseEntity.notFound().build();
     }
 
-    @PatchMapping("/{id}/personaldata")
+    @SuppressWarnings("deprecation")
+    @PatchMapping(value = "/{id}/personaldata", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Buddy> updateBuddyPersonalData(@PathVariable String id, @RequestBody PersonalData updatedPersonalData) {
         Buddy updatedBuddy = buddyService.updateBuddyPersonalData(id, updatedPersonalData);
         if (updatedBuddy != null) {
@@ -79,13 +86,15 @@ public class BuddyController {
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/{id}")
+    @SuppressWarnings("deprecation")
+    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Void> deleteBuddy(@PathVariable String id) {
         buddyService.deleteBuddy(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/{id}/send-approval")
+    @SuppressWarnings("deprecation")
+    @PostMapping(value = "/{id}/send-approval", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Void> sendForApproval(@PathVariable String id) {
         Buddy updatedBuddy = buddyService.sendForApproval(id);
 
@@ -94,12 +103,14 @@ public class BuddyController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/{id}/approve")
+    @SuppressWarnings("deprecation")
+    @PostMapping(value = "/{id}/approve", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Void> approve(@PathVariable String id) {
         return updateApprove(id, true);
     }
 
-    @PostMapping("/{id}/reject")
+    @SuppressWarnings("deprecation")
+    @PostMapping(value = "/{id}/reject", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Void> reject(@PathVariable String id) {
         return updateApprove(id, false);
     }

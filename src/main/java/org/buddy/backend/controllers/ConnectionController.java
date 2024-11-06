@@ -1,6 +1,7 @@
 package org.buddy.backend.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +34,8 @@ public class ConnectionController {
         return connectionService.getAllConnections();
     }
 
-    @GetMapping("/{id}")
+    @SuppressWarnings("deprecation")
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Connection> getConnectionById(@PathVariable String id) {
         Connection connection = connectionService.getConnectionById(id);
         if (connection != null) {
@@ -42,12 +44,14 @@ public class ConnectionController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping
+    @SuppressWarnings("deprecation")
+    @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Connection createConnection(@RequestBody Connection connection, HttpServletRequest request) {
         return connectionService.createConnection(connection);
     }
 
-    @PutMapping("/{id}")
+    @SuppressWarnings("deprecation")
+    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Connection> updateConnection(@PathVariable String id, @RequestBody Connection connection) {
         Connection updatedConnection = connectionService.updateConnection(id, connection);
         if (updatedConnection != null) {
@@ -56,13 +60,15 @@ public class ConnectionController {
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/{id}")
+    @SuppressWarnings("deprecation")
+    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Void> deleteConnection(@PathVariable String id) {
         connectionService.deleteConnection(id);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/buddies/{buddyID}")
+    @SuppressWarnings("deprecation")
+    @GetMapping(value = "/buddies/{buddyID}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<Connection>> getConnectionsByBuddyID(@PathVariable String buddyID) {
         List<Connection> connections = connectionService.getConnectionsByBuddyID(buddyID);
         if (connections != null) {
@@ -71,7 +77,8 @@ public class ConnectionController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/elders/{elderID}")
+    @SuppressWarnings("deprecation")
+    @GetMapping(value = "/elders/{elderID}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<Connection>> getConnectionsByElderID(@PathVariable String elderID) {
         List<Connection> connections = connectionService.getConnectionsByElderID(elderID);
         if (connections != null) {
@@ -81,7 +88,8 @@ public class ConnectionController {
     }
 
     /* Si se califica la meeting además de crearse, esto se detecta y se re-calcula el rating global del usuario al que se calificó */
-    @PostMapping("/{connectionID}/meetings")
+    @SuppressWarnings("deprecation")
+    @PostMapping(value = "/{connectionID}/meetings", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Meeting> createMeeting(@PathVariable String connectionID, @RequestBody Meeting newMeeting) {
         Meeting createdMeeting = connectionService.createMeeting(connectionID, newMeeting);
         if (createdMeeting != null) {
@@ -92,7 +100,8 @@ public class ConnectionController {
     }
 
     /* Si se califica un meeting, esto se detecta y se re-calcula el rating global del usuario al que se calificó */
-    @PutMapping("/{connectionID}/meetings/{meetingID}")
+    @SuppressWarnings("deprecation")
+    @PutMapping(value = "/{connectionID}/meetings/{meetingID}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Meeting> updateMeeting(@PathVariable String connectionID, @PathVariable String meetingID, @RequestBody Meeting meeting) {
         Meeting updatedMeeting = connectionService.updateMeeting(connectionID, meetingID, meeting);
         if (updatedMeeting != null) {
