@@ -6,6 +6,7 @@ import org.buddy.backend.models.UserWithPendingSignUp;
 import org.buddy.backend.services.BuddyService;
 import org.buddy.backend.services.ElderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,8 @@ public class UserController {
     @Autowired
     private ElderService elderService;
 
-    @GetMapping(value = "/me", produces = "application/json;charset=UTF-8")
+    @SuppressWarnings("deprecation")
+    @GetMapping(value = "/me", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Operation(security = { @SecurityRequirement(name = "bearer-key") })
     public ResponseEntity<?> getCurrentUser() {
         String firebaseUID = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

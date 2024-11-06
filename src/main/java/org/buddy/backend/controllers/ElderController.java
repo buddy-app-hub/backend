@@ -1,6 +1,7 @@
 package org.buddy.backend.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,12 +33,14 @@ public class ElderController {
     @Autowired
     private ElderService elderService;
 
-    @GetMapping
+    @SuppressWarnings("deprecation")
+    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Elder> getAllElders() {
         return elderService.getAllElders();
     }
 
-    @GetMapping(value = "/{id}", produces = "application/json;charset=UTF-8")
+    @SuppressWarnings("deprecation")
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Elder> getElderById(@PathVariable String id) {
         Elder elder = elderService.getElderById(id);
         if (elder != null) {
@@ -46,7 +49,8 @@ public class ElderController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping(produces = "application/json;charset=UTF-8")
+    @SuppressWarnings("deprecation")
+    @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Elder createElder(@RequestBody Elder elder, HttpServletRequest request) {
         System.out.println(elder);
 
@@ -55,7 +59,8 @@ public class ElderController {
         return elderStored;
     }
 
-    @PutMapping(value = "/{id}", produces = "application/json;charset=UTF-8")
+    @SuppressWarnings("deprecation")
+    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Elder> updateElder(@PathVariable String id, @RequestBody Elder elder) {
         Elder updatedElder = elderService.updateElder(id, elder);
         if (updatedElder != null) {
@@ -64,7 +69,8 @@ public class ElderController {
         return ResponseEntity.notFound().build();
     }
 
-    @PatchMapping(value = "/{id}/profile", produces = "application/json;charset=UTF-8")
+    @SuppressWarnings("deprecation")
+    @PatchMapping(value = "/{id}/profile", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Elder> updateElderProfile(@PathVariable String id, @RequestBody ElderProfile updatedProfile) {
         Elder updatedElder = elderService.updateElderProfile(id, updatedProfile);
         if (updatedElder != null) {
@@ -73,7 +79,8 @@ public class ElderController {
         return ResponseEntity.notFound().build();
     }
 
-    @PatchMapping(value = "/{id}/personaldata", produces = "application/json;charset=UTF-8")
+    @SuppressWarnings("deprecation")
+    @PatchMapping(value = "/{id}/personaldata", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Elder> updateElderPersonalData(@PathVariable String id, @RequestBody PersonalData updatedPersonalData) {
         Elder updatedElder = elderService.updateElderPersonalData(id, updatedPersonalData);
         if (updatedElder != null) {
@@ -82,14 +89,16 @@ public class ElderController {
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping(value = "/{id}", produces = "application/json;charset=UTF-8")
+    @SuppressWarnings("deprecation")
+    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Void> deleteElder(@PathVariable String id) {
         elderService.deleteElder(id);
         return ResponseEntity.noContent().build();
     }
 
     // Endpoint usando desde mobile para obtener los buddies recomendados previamente procesados por la buddy-recommender-lambda
-    @GetMapping(value = "/{id}/buddies/recommended", produces = "application/json;charset=UTF-8")
+    @SuppressWarnings("deprecation")
+    @GetMapping(value = "/{id}/buddies/recommended", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<RecommendedBuddy>> getRecommendedBuddies(@PathVariable String id) {
         List<RecommendedBuddy> recommendedBuddies = elderService.getRecommendedBuddies(id);
         if (recommendedBuddies != null) {
@@ -99,7 +108,8 @@ public class ElderController {
     }
 
     // Endpoint usado desde la buddy-recommender-lambda para obtener buddies en el rango del Elder para rankearlos y luego guardarlos usando updateRecommendedBuddies
-    @GetMapping(value = "/{id}/buddies", produces = "application/json;charset=UTF-8")
+    @SuppressWarnings("deprecation")
+    @GetMapping(value = "/{id}/buddies", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<BuddyWithinRange>> getBuddiesWithinRange(@PathVariable String id) {
         List<BuddyWithinRange> buddiesWithinRange = elderService.getBuddiesWithinRange(id);
         if (buddiesWithinRange != null) {
@@ -109,7 +119,8 @@ public class ElderController {
     }
     
     // Endpoint usado desde la buddy-recommender-lambda para guardar a los buddies recomendados con los score resultantes del algoritmo de rankeo usado
-    @PatchMapping(value = "/{id}/buddies/recommended", produces = "application/json;charset=UTF-8")
+    @SuppressWarnings("deprecation")
+    @PatchMapping(value = "/{id}/buddies/recommended", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Elder> updateRecommendedBuddies(@PathVariable String id, @RequestBody List<RecommendedBuddy> recommendedBuddies) {
         Elder updatedElder = elderService.updateRecommendedBuddies(id, recommendedBuddies);
         if (updatedElder != null) {
