@@ -115,4 +115,13 @@ public class BuddyService {
         buddy.setIsApprovedBuddy(approve);
         return buddyRepository.save(buddy);
     }
+
+    public Buddy updateIdentityValidated (String id, boolean approve) {
+        Buddy buddy = buddyRepository.findById(id).orElse(null);
+
+        if (buddy == null) { return null; }
+
+        buddy.setIsIdentityValidated(approve);
+        return buddyRepository.save(buddy);
+    }
 }

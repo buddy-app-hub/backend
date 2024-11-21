@@ -115,8 +115,28 @@ public class BuddyController {
         return updateApprove(id, false);
     }
 
+    @SuppressWarnings("deprecation")
+    @PostMapping("/{id}/identity/approve")
+    public ResponseEntity<Void> validateIdentity(@PathVariable String id) {
+        return updateIdentityValidated(id, true);
+    }
+
+    @SuppressWarnings("deprecation")
+    @PostMapping("/{id}/identity/reject")
+    public ResponseEntity<Void> rejectIdentity(@PathVariable String id) {
+        return updateIdentityValidated(id, false);
+    }
+
     private ResponseEntity<Void> updateApprove(String id, boolean approve) {
         Buddy updatedBuddy = buddyService.updateApprove(id, approve);
+
+        if (updatedBuddy == null) return ResponseEntity.notFound().build();
+
+        return ResponseEntity.noContent().build();
+    }
+
+    private ResponseEntity<Void> updateIdentityValidated(String id, boolean approve) {
+        Buddy updatedBuddy = buddyService.updateIdentityValidated(id, approve);
 
         if (updatedBuddy == null) return ResponseEntity.notFound().build();
 
