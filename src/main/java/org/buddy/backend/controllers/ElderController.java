@@ -1,5 +1,13 @@
 package org.buddy.backend.controllers;
 
+import java.util.List;
+
+import org.buddy.backend.models.BuddyWithinRange;
+import org.buddy.backend.models.Elder;
+import org.buddy.backend.models.ElderProfile;
+import org.buddy.backend.models.PersonalData;
+import org.buddy.backend.models.RecommendedBuddy;
+import org.buddy.backend.services.ElderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,15 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
-
-import org.buddy.backend.models.BuddyWithinRange;
-import org.buddy.backend.models.Elder;
-import org.buddy.backend.models.ElderProfile;
-import org.buddy.backend.models.PersonalData;
-import org.buddy.backend.models.RecommendedBuddy;
-import org.buddy.backend.services.ElderService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("elders")
@@ -107,7 +106,7 @@ public class ElderController {
         return ResponseEntity.notFound().build();
     }
 
-    // Endpoint usado desde la buddy-recommender-lambda para obtener buddies en el rango del Elder para rankearlos y luego guardarlos usando updateRecommendedBuddies
+    // Endpoint usado desde la buddy-recommender-lambda para obtener buddies (solo aprobados) en el rango del Elder para rankearlos y luego guardarlos usando updateRecommendedBuddies
     @SuppressWarnings("deprecation")
     @GetMapping(value = "/{id}/buddies", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<BuddyWithinRange>> getBuddiesWithinRange(@PathVariable String id) {
