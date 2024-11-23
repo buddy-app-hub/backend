@@ -61,9 +61,24 @@ public class FirebaseService {
 
             System.out.println("Eliminando chats para el usuario: " + userId);
 
+            // Iteramos sobre los documentos (chats)
             for (QueryDocumentSnapshot chat : chatDocuments) {
-                System.out.println("Eliminando chat con ID: " + chat.getId());
-                chat.getReference().delete();
+                String chatId = chat.getId();
+                System.out.println("Procesando chat con ID: " + chatId);
+
+                // Eliminamos la subcoleccion de messages
+                CollectionReference messages = chat.getReference().collection("messages");
+                ApiFuture<QuerySnapshot> messagesQuery = messages.get();
+                List<QueryDocumentSnapshot> messageDocuments = messagesQuery.get().getDocuments();
+
+                for (QueryDocumentSnapshot message : messageDocuments) {
+                    System.out.println("Eliminando mensaje con ID: " + message.getId());
+                    message.getReference().delete().get();
+                }
+
+                // Una vez eliminados los mensajes, eliminar el chat principal
+                chat.getReference().delete().get();
+                System.out.println("Chat eliminado con ID: " + chatId);
             }
 
             System.out.println("Eliminación de chats completa para el usuario: " + userId);

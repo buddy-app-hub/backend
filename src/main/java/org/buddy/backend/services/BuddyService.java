@@ -67,7 +67,8 @@ public class BuddyService {
     public void deleteBuddy(String id) {
         // Eliminamos la wallet
         Buddy buddy = buddyRepository.findById(id).orElse(null);
-        if (buddy != null) {
+        if (buddy != null && buddy.getWalletId() != null) {
+            System.out.println("Eliminando wallet para buddy: " + buddy.getFirebaseUID());
             walletService.deleteWallet(buddy.getWalletId());
         }
 
