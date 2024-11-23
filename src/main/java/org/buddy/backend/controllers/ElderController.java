@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -29,6 +30,7 @@ import jakarta.servlet.http.HttpServletRequest;
 @SecurityRequirement(name = "bearer-key")
 // Para usarlo a nivel metodo: @Operation(security = { @SecurityRequirement(name = "bearer-key") })
 public class ElderController {
+
     @Autowired
     private ElderService elderService;
 
@@ -70,8 +72,11 @@ public class ElderController {
 
     @SuppressWarnings("deprecation")
     @PatchMapping(value = "/{id}/profile", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Elder> updateElderProfile(@PathVariable String id, @RequestBody ElderProfile updatedProfile) {
-        Elder updatedElder = elderService.updateElderProfile(id, updatedProfile);
+    public ResponseEntity<Elder> updateElderProfile(
+            @PathVariable String id,
+            @RequestBody ElderProfile updatedProfile,
+            @RequestParam(value = "recalcRecommendedBuddies", required = false, defaultValue = "false") boolean recalcRecommendedBuddies) {
+        Elder updatedElder = elderService.updateElderProfile(id, updatedProfile, recalcRecommendedBuddies);
         if (updatedElder != null) {
             return ResponseEntity.ok(updatedElder);
         }
@@ -80,8 +85,12 @@ public class ElderController {
 
     @SuppressWarnings("deprecation")
     @PatchMapping(value = "/{id}/personaldata", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Elder> updateElderPersonalData(@PathVariable String id, @RequestBody PersonalData updatedPersonalData) {
-        Elder updatedElder = elderService.updateElderPersonalData(id, updatedPersonalData);
+    public ResponseEntity<Elder> updateElderPersonalData(
+            @PathVariable String id,
+            @RequestBody PersonalData updatedPersonalData,
+            @RequestParam(value = "recalcRecommendedBuddies", required = false, defaultValue = "false") boolean recalcRecommendedBuddies) {
+
+        Elder updatedElder = elderService.updateElderPersonalData(id, updatedPersonalData, recalcRecommendedBuddies);
         if (updatedElder != null) {
             return ResponseEntity.ok(updatedElder);
         }
@@ -116,7 +125,7 @@ public class ElderController {
         }
         return ResponseEntity.notFound().build();
     }
-    
+
     // Endpoint usado desde la buddy-recommender-lambda para guardar a los buddies recomendados con los score resultantes del algoritmo de rankeo usado
     @SuppressWarnings("deprecation")
     @PatchMapping(value = "/{id}/buddies/recommended", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -126,5 +135,11 @@ public class ElderController {
             return ResponseEntity.ok(updatedElder);
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping(value = "/{id}/buddies/recalc")
+    public ResponseEntity<Void> recalculateRecommendedBuddies(@PathVariable String id) {
+        elderService.recalculateRecommendedBuddies(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -201,7 +201,7 @@ public class ConnectionService {
         if (averageRating != null) {
             ElderProfile elderProfile = elderService.getElderById(elderID).getElderProfile();
             elderProfile.setGlobalRating(averageRating);
-            elderService.updateElderProfile(elderID, elderProfile);
+            elderService.updateElderProfile(elderID, elderProfile, true);
         }
     }
 

@@ -83,7 +83,7 @@ public class ElderService {
         return elderRepository.findElderByFirebaseUID(firebaseUID);
     }
 
-    public Elder updateElderProfile(String firebaseUID, ElderProfile updatedProfile) {
+    public Elder updateElderProfile(String firebaseUID, ElderProfile updatedProfile, boolean recalcRecommendedBuddies) {
         Elder elder = elderRepository.findElderByFirebaseUID(firebaseUID);
         if (elder == null) {
             throw new ResourceNotFoundException("Elder not found with firebaseUID: " + firebaseUID);
@@ -93,12 +93,14 @@ public class ElderService {
 
         elder.setElderProfile(updatedProfile);
 
-        sqsService.updateRecommendedBuddies(firebaseUID); // Mandamos a actualizar los recommended buddies
+        if (recalcRecommendedBuddies) {
+            this.recalculateRecommendedBuddies(firebaseUID); // Mandamos a actualizar los recommended buddies
+        }
 
         return elderRepository.save(elder);
     }
 
-    public Elder updateElderPersonalData(String firebaseUID, PersonalData updatedPersonalData) {
+    public Elder updateElderPersonalData(String firebaseUID, PersonalData updatedPersonalData, boolean recalcRecommendedBuddies) {
         System.out.println("Updating elder personal data for " + firebaseUID);
 
         Elder elder = elderRepository.findElderByFirebaseUID(firebaseUID);
@@ -116,7 +118,9 @@ public class ElderService {
                 Address address = addressHelper.processCoordinatesFromAddress(updatedPersonalData.getAddress());
                 updatedPersonalData.setAddress(address);
 
-                sqsService.updateRecommendedBuddies(firebaseUID); // Tambien actualizamos los recommended buddies porque cambio la ubicacion
+                if (recalcRecommendedBuddies) {
+                    this.recalculateRecommendedBuddies(firebaseUID); // Tambien actualizamos los recommended buddies porque cambio la ubicacion
+                }
             }
         }
 
@@ -160,6 +164,8 @@ public class ElderService {
     }
 
     public Elder updateRecommendedBuddies(String id, List<RecommendedBuddy> recommendedBuddies) {
+        System.out.println("Recalculating recommended buddies for elder " + id);
+
         Elder elder = elderRepository.findById(id).orElse(null);
 
         if (elder != null) {
@@ -202,5 +208,11 @@ public class ElderService {
         }
 
         return null;
+    }
+
+    public void recalculateRecommendedBuddies(String id) {
+        if (elderRepository.existsById(id)) {
+            sqsService.updateRecommendedBuddies(id);
+        }
     }
 }
