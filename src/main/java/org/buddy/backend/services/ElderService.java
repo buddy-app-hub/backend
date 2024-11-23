@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ElderService {
+
     @Autowired
     private ElderRepository elderRepository;
     @Autowired
@@ -32,6 +33,8 @@ public class ElderService {
     private SqsService sqsService;
     @Autowired
     private ConnectionRepository connRepo;
+    @Autowired
+    private FirebaseService firebaseService;
 
     public List<Elder> getAllElders() {
         return elderRepository.findAll();
@@ -59,7 +62,21 @@ public class ElderService {
     }
 
     public void deleteElder(String id) {
+        // Eliminamos las conexiones
+        List<Connection> conns = connRepo.findConnectionsByElderID(id);
+        conns.forEach(c -> connRepo.deleteById(c.getId()));
+
+        // Eliminamos la carpeta del usuario de firebase storage
+        firebaseService.deleteUserFromStorage(id);
+
+        // Eliminamos los chats de firestore
+        firebaseService.deleteUserChats(id);
+
+        // Eliminamos al buddy
         elderRepository.deleteById(id);
+
+        // Eliminamos el usuario de firebase auth
+        firebaseService.deleteUserFromAuth(id);
     }
 
     public Elder findByFirebaseUID(String firebaseUID) {
@@ -105,8 +122,6 @@ public class ElderService {
 
         elder.setPersonalData(updatedPersonalData);
 
-        
-
         return elderRepository.save(elder);
     }
 
@@ -117,7 +132,7 @@ public class ElderService {
         if (elder != null) {
             Double[] coords = elder.getPersonalData().getAddress().getCoordinates().getCoordinates().toArray(new Double[0]);
             int rangeInMeters = elder.getElderProfile().getConnectionPreferences().getMaxDistanceKM() * 1000;
-            
+
             /*
              * Obtenemos un listado de buddies que cumplen con estas condiciones:
              * 1) que esten en el rango de preferencia de distancia del elder
@@ -126,15 +141,15 @@ public class ElderService {
              * 4) que el buddy no este bloqueado
              */
             List<BuddyWithinRange> buddiesInRange = buddyRepository.findBuddiesWithinRange(
-                coords[0], coords[1],
-                rangeInMeters
+                    coords[0], coords[1],
+                    rangeInMeters
             );
 
             // Sacamos a los buddies con los que ya haya conectado el elder
             List<String> connectedBuddyIDs = connRepo.findConnectionsByElderID(id)
-                .stream()
-                .map(Connection::getBuddyID)
-                .collect(Collectors.toList());
+                    .stream()
+                    .map(Connection::getBuddyID)
+                    .collect(Collectors.toList());
 
             buddiesInRange.removeIf(b -> connectedBuddyIDs.contains(b.getBuddy().getFirebaseUID()));
 
@@ -157,35 +172,35 @@ public class ElderService {
 
     public List<RecommendedBuddy> getRecommendedBuddies(String id) {
         Elder elder = elderRepository.findById(id).orElse(null);
-    
+
         if (elder != null) {
             List<RecommendedBuddy> buddiesToRecomend;
-    
+
             elder.getRecommendedBuddies().forEach(rb -> {
                 Buddy buddy = buddyRepository.findBuddyByFirebaseUID(rb.getBuddyID());
                 if (buddy != null) {
                     rb.setBuddy(buddy); // No vamos a guardarlo en la db, solo guardamos el ID
                 }
             });
-    
+
             // Obtenemos la lista de buddies ya conectados con este elder
             List<String> connectedBuddyIDs = connRepo.findConnectionsByElderID(id)
-                .stream()
-                .map(Connection::getBuddyID)
-                .collect(Collectors.toList());
-    
+                    .stream()
+                    .map(Connection::getBuddyID)
+                    .collect(Collectors.toList());
+
             buddiesToRecomend = elder.getRecommendedBuddies();
-    
+
             // Filtramos buddies ya conectados y bloqueados
-            buddiesToRecomend.removeIf(rb -> 
-                rb.getBuddy() == null || 
-                connectedBuddyIDs.contains(rb.getBuddy().getFirebaseUID()) || 
-                rb.getBuddy().getIsBlocked()
+            buddiesToRecomend.removeIf(rb
+                    -> rb.getBuddy() == null
+                    || connectedBuddyIDs.contains(rb.getBuddy().getFirebaseUID())
+                    || rb.getBuddy().getIsBlocked()
             );
-    
+
             return buddiesToRecomend;
         }
-    
+
         return null;
     }
 }
