@@ -17,8 +17,9 @@ public interface BuddyRepository extends MongoRepository<Buddy, String> {
      * 3: devuelvo una estructura que sea compatible con RecommendedBuddy (el buddy junto a la distancia entre él y el elder)
      */
     @Aggregation(pipeline = {
-            "{ '$geoNear': { 'near': { 'type': 'Point', 'coordinates': [?0, ?1] }, 'distanceField': 'distanceBetween', 'maxDistance': ?2, 'spherical': true } } }",
-            "{ '$match': { '$expr': { '$gte': [ '$buddyProfile.connectionPreferences.maxDistanceKM', { '$divide': [ '$distanceBetween', 1000 ] } ] } } } }",
-            "{ '$project': { 'buddy': '$$ROOT', 'distanceToKM': { '$divide': [ '$distanceBetween', 1000 ] } } }" })
+        "{ '$geoNear': { 'near': { 'type': 'Point', 'coordinates': [?0, ?1] }, 'distanceField': 'distanceBetween', 'maxDistance': ?2, 'spherical': true } }",
+        "{ '$match': { '$expr': { '$and': [ { '$gte': [ '$buddyProfile.connectionPreferences.maxDistanceKM', { '$divide': [ '$distanceBetween', 1000 ] } ] }, { '$eq': [ '$isApprovedBuddy', true ] }, { '$eq': [ '$isBlocked', false ] } ] } } }",
+        "{ '$project': { 'buddy': '$$ROOT', 'distanceToKM': { '$divide': [ '$distanceBetween', 1000 ] } } }"
+    })
     List<BuddyWithinRange> findBuddiesWithinRange(Double longuitude, Double latitude, int maxDistanceMeters);
 }

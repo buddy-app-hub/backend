@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ElderService {
+
     @Autowired
     private ElderRepository elderRepository;
     @Autowired
@@ -32,6 +33,8 @@ public class ElderService {
     private SqsService sqsService;
     @Autowired
     private ConnectionRepository connRepo;
+    @Autowired
+    private FirebaseService firebaseService;
 
     public List<Elder> getAllElders() {
         return elderRepository.findAll();
@@ -59,14 +62,28 @@ public class ElderService {
     }
 
     public void deleteElder(String id) {
+        // Eliminamos las conexiones
+        List<Connection> conns = connRepo.findConnectionsByElderID(id);
+        conns.forEach(c -> connRepo.deleteById(c.getId()));
+
+        // Eliminamos la carpeta del usuario de firebase storage
+        firebaseService.deleteUserFromStorage(id);
+
+        // Eliminamos los chats de firestore
+        firebaseService.deleteUserChats(id);
+
+        // Eliminamos al buddy
         elderRepository.deleteById(id);
+
+        // Eliminamos el usuario de firebase auth
+        firebaseService.deleteUserFromAuth(id);
     }
 
     public Elder findByFirebaseUID(String firebaseUID) {
         return elderRepository.findElderByFirebaseUID(firebaseUID);
     }
 
-    public Elder updateElderProfile(String firebaseUID, ElderProfile updatedProfile) {
+    public Elder updateElderProfile(String firebaseUID, ElderProfile updatedProfile, boolean recalcRecommendedBuddies) {
         Elder elder = elderRepository.findElderByFirebaseUID(firebaseUID);
         if (elder == null) {
             throw new ResourceNotFoundException("Elder not found with firebaseUID: " + firebaseUID);
@@ -76,12 +93,14 @@ public class ElderService {
 
         elder.setElderProfile(updatedProfile);
 
-        sqsService.updateRecommendedBuddies(firebaseUID); // Mandamos a actualizar los recommended buddies
+        if (recalcRecommendedBuddies) {
+            this.recalculateRecommendedBuddies(firebaseUID); // Mandamos a actualizar los recommended buddies
+        }
 
         return elderRepository.save(elder);
     }
 
-    public Elder updateElderPersonalData(String firebaseUID, PersonalData updatedPersonalData) {
+    public Elder updateElderPersonalData(String firebaseUID, PersonalData updatedPersonalData, boolean recalcRecommendedBuddies) {
         System.out.println("Updating elder personal data for " + firebaseUID);
 
         Elder elder = elderRepository.findElderByFirebaseUID(firebaseUID);
@@ -99,13 +118,13 @@ public class ElderService {
                 Address address = addressHelper.processCoordinatesFromAddress(updatedPersonalData.getAddress());
                 updatedPersonalData.setAddress(address);
 
-                sqsService.updateRecommendedBuddies(firebaseUID); // Tambien actualizamos los recommended buddies porque cambio la ubicacion
+                if (recalcRecommendedBuddies) {
+                    this.recalculateRecommendedBuddies(firebaseUID); // Tambien actualizamos los recommended buddies porque cambio la ubicacion
+                }
             }
         }
 
         elder.setPersonalData(updatedPersonalData);
-
-        
 
         return elderRepository.save(elder);
     }
@@ -117,22 +136,24 @@ public class ElderService {
         if (elder != null) {
             Double[] coords = elder.getPersonalData().getAddress().getCoordinates().getCoordinates().toArray(new Double[0]);
             int rangeInMeters = elder.getElderProfile().getConnectionPreferences().getMaxDistanceKM() * 1000;
-            
+
             /*
-             * Obtenemos un listado de buddies que cumplen con dos condiciones:
+             * Obtenemos un listado de buddies que cumplen con estas condiciones:
              * 1) que esten en el rango de preferencia de distancia del elder
              * 2) que el elder este dentro del rango de preferencia de los buddies que cumplen con 1)
+             * 3) que el buddy este aprobado como tal
+             * 4) que el buddy no este bloqueado
              */
             List<BuddyWithinRange> buddiesInRange = buddyRepository.findBuddiesWithinRange(
-                coords[0], coords[1],
-                rangeInMeters
+                    coords[0], coords[1],
+                    rangeInMeters
             );
 
             // Sacamos a los buddies con los que ya haya conectado el elder
             List<String> connectedBuddyIDs = connRepo.findConnectionsByElderID(id)
-                .stream()
-                .map(Connection::getBuddyID)
-                .collect(Collectors.toList());
+                    .stream()
+                    .map(Connection::getBuddyID)
+                    .collect(Collectors.toList());
 
             buddiesInRange.removeIf(b -> connectedBuddyIDs.contains(b.getBuddy().getFirebaseUID()));
 
@@ -143,6 +164,8 @@ public class ElderService {
     }
 
     public Elder updateRecommendedBuddies(String id, List<RecommendedBuddy> recommendedBuddies) {
+        System.out.println("Recalculating recommended buddies for elder " + id);
+
         Elder elder = elderRepository.findById(id).orElse(null);
 
         if (elder != null) {
@@ -156,29 +179,40 @@ public class ElderService {
     public List<RecommendedBuddy> getRecommendedBuddies(String id) {
         Elder elder = elderRepository.findById(id).orElse(null);
 
-        
         if (elder != null) {
             List<RecommendedBuddy> buddiesToRecomend;
-            
+
             elder.getRecommendedBuddies().forEach(rb -> {
-                Buddy buddy = buddyRepository.findBuddyByFirebaseUID(rb.getBuddyID()); 
+                Buddy buddy = buddyRepository.findBuddyByFirebaseUID(rb.getBuddyID());
                 if (buddy != null) {
                     rb.setBuddy(buddy); // No vamos a guardarlo en la db, solo guardamos el ID
                 }
             });
 
-            // Sacamos a los buddies con los que ya haya conectado el elder
+            // Obtenemos la lista de buddies ya conectados con este elder
             List<String> connectedBuddyIDs = connRepo.findConnectionsByElderID(id)
-            .stream()
-            .map(Connection::getBuddyID)
-            .collect(Collectors.toList());
+                    .stream()
+                    .map(Connection::getBuddyID)
+                    .collect(Collectors.toList());
 
             buddiesToRecomend = elder.getRecommendedBuddies();
 
-            buddiesToRecomend.removeIf(b -> connectedBuddyIDs.contains(b.getBuddy().getFirebaseUID()));
+            // Filtramos buddies ya conectados y bloqueados
+            buddiesToRecomend.removeIf(rb
+                    -> rb.getBuddy() == null
+                    || connectedBuddyIDs.contains(rb.getBuddy().getFirebaseUID())
+                    || rb.getBuddy().getIsBlocked()
+            );
 
             return buddiesToRecomend;
         }
+
         return null;
+    }
+
+    public void recalculateRecommendedBuddies(String id) {
+        if (elderRepository.existsById(id)) {
+            sqsService.updateRecommendedBuddies(id);
+        }
     }
 }
