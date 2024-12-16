@@ -6,6 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+import java.util.List;
+import java.util.Map;
+
 @Service
 public class WalletService {
 
@@ -18,7 +21,11 @@ public class WalletService {
     }
 
     public Wallet createWallet() {
-        return new Wallet();
+         return this.restClient.post()
+                 .uri("/wallets")
+                 .body(Map.of("transactions", List.of()))
+                 .retrieve()
+                 .body(Wallet.class);
     }
 
     public void deleteWallet(String walletID) {
